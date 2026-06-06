@@ -61,8 +61,10 @@ const memoryDB = {
   audit_logs: [],
   addresses: [],
   reviews: [],
-  order_items: []
+  order_items: [],
+  email_logs: []
 };
+
 
 
 let pool = null;
@@ -479,6 +481,22 @@ export const query = async (text, params = []) => {
     memoryDB.audit_logs.push(newAudit);
     return { rows: [newAudit] };
   }
+
+  // 13a. INSERT Email Logs
+  if (queryStr.includes('insert into email_logs')) {
+    const [recipient, subject, status, error_message] = params;
+    const newEmailLog = {
+      id: generateUUID(),
+      recipient,
+      subject,
+      status,
+      error_message: error_message || null,
+      sent_at: new Date()
+    };
+    memoryDB.email_logs.push(newEmailLog);
+    return { rows: [newEmailLog] };
+  }
+
 
   // 14. INSERT Products
   if (queryStr.includes('insert into products')) {

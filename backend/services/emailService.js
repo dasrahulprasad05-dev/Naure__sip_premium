@@ -1,9 +1,7 @@
-/* ==========================================================================
-   NatureSip Transactional Email Service
-   ========================================================================== */
 import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 import { logger } from '../utils/logger.js';
+import { query } from '../config/db.js';
 
 dotenv.config();
 
@@ -34,12 +32,24 @@ if (isSmtpConfigured) {
 }
 
 /**
- * Generic email sending wrapper
+ * Generic email sending wrapper with database logging and no-crash safety
  */
 const sendMail = async (to, subject, htmlContent) => {
+  const insertLog = async (status, errMessage = null) => {
+    try {
+      await query(
+        'INSERT INTO email_logs (recipient, subject, status, error_message) VALUES ($1, $2, $3, $4)',
+        [to, subject, status, errMessage]
+      );
+    } catch (dbErr) {
+      logger.error(`❌ Failed to write log to email_logs database: ${dbErr.message}`);
+    }
+  };
+
   if (!isSmtpConfigured) {
     logger.info(`[Email Simulator] Outbound Email to: <${to}>\nSubject: ${subject}\nBody: ${htmlContent.substring(0, 300)}... (truncated)`);
-    return { simulated: true, messageId: `msg_mock_${Date.now()}` };
+    await insertLog('sent');
+    return { simulated: true, success: true, messageId: `msg_mock_${Date.now()}` };
   }
 
   try {
@@ -50,12 +60,16 @@ const sendMail = async (to, subject, htmlContent) => {
       html: htmlContent
     });
     logger.info(`✉️ Email successfully dispatched to ${to}. Message ID: ${info.messageId}`);
-    return { simulated: false, messageId: info.messageId };
+    await insertLog('sent');
+    return { simulated: false, success: true, messageId: info.messageId };
   } catch (err) {
     logger.error(`❌ Failed to send email to ${to}: ${err.message}`);
-    throw err;
+    await insertLog('failed', err.message);
+    // Graceful error capture instead of crashing client pipelines
+    return { simulated: false, success: false, error: err.message };
   }
 };
+
 
 /**
  * @desc    Send Welcome email to newly registered users

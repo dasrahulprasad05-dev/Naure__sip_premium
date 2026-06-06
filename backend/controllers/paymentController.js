@@ -67,20 +67,23 @@ const processOrderPayment = async (orderId, transactionId, amount, provider, pay
   ]);
 
   // 5. Decrement stock atomically
+  let quantity = 1;
   const orderItemsResult = await query('SELECT * FROM order_items WHERE order_id = $1', [orderId]);
   if (orderItemsResult.rows.length > 0) {
+    // For confirmation email, aggregate total item quantities
+    quantity = orderItemsResult.rows.reduce((sum, item) => sum + item.quantity, 0);
     for (const item of orderItemsResult.rows) {
       if (item.product_id) {
         await deductStockAtomically(item.product_id, item.quantity, orderId);
       }
     }
   } else {
-    const quantity = 1;
     const stockDeducted = await deductStockAtomically(product.id, quantity, orderId);
     if (!stockDeducted) {
       console.warn(`⚠️ Stock deduction failed or was skipped during payment processing for order ${orderId}`);
     }
   }
+
 
   // 6. Send order confirmation email
   const emailDetails = {
