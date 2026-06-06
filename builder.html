@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureSip Custom Builder | Craft Your Perfect Infusion</title>
+  <meta name="description" content="Formulate your own custom organic juice blend. Drag fresh fruits and botanical superfoods, balance taste profiles, and pre-order your custom recipe.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-content">
+      <div class="loader-circle-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-fruit-icon">🍹</div>
+      </div>
+      <h2 class="loader-title">NatureSip Builder</h2>
+      <p class="loader-subtitle">Sterilizing the blender blades...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header" class="glass-header scrolled">
+    <div class="header-container">
+      <div class="logo-wrapper" onclick="window.location.href='index.html'">
+        <span class="logo-emoji">🌿</span>
+        <span class="logo-text">NatureSip</span>
+      </div>
+      <nav id="desktop-nav" class="nav-links">
+        <a href="index.html#hero" class="nav-link">Home</a>
+        <a href="index.html#flavors" class="nav-link">Flavors</a>
+        <a href="index.html#benefits" class="nav-link">Benefits</a>
+        <a href="quiz.html" class="nav-link">Flavor Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link dropdown-trigger" onclick="return false;">Experiences ▾</a>
+          <div class="dropdown-menu glass-card">
+            <a href="pairing.html" class="dropdown-item">Pairing Guide</a>
+            <a href="map.html" class="dropdown-item">Sourcing Map</a>
+            <a href="builder.html" class="dropdown-item">Craft Your Sip</a>
+          </div>
+        </div>
+      </nav>
+      <!-- Sign In / User Profile Container -->
+      <div id="desktop-auth-container" class="auth-container"></div>
+      <div class="theme-toggle-wrapper">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <div class="cta-wrapper">
+        <a href="index.html#preorder" id="nav-cta-btn" class="btn btn-primary">Pre-Order Now</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="mobile-drawer">
+    <nav class="mobile-nav-links">
+      <a href="index.html#hero" class="mobile-nav-link">Home</a>
+      <a href="index.html#flavors" class="mobile-nav-link">Flavors</a>
+      <a href="index.html#benefits" class="mobile-nav-link">Benefits</a>
+      <a href="quiz.html" class="mobile-nav-link">Flavor Quiz</a>
+      <a href="pairing.html" class="mobile-nav-link">Pairing Guide</a>
+      <a href="map.html" class="mobile-nav-link">Sourcing Map</a>
+      <a href="builder.html" class="mobile-nav-link active">Craft Your Sip</a>
+      <!-- Mobile Sign In / User Profile Container -->
+      <div id="mobile-auth-container" class="mobile-auth-container"></div>
+      <div class="mobile-theme-toggle-row">
+        <span>Dark Mode</span>
+        <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <a href="index.html#preorder" class="mobile-nav-link btn-mobile-cta">Pre-Order Now</a>
+    </nav>
+  </div>
+
+  <!-- Main Builder Area -->
+  <main class="builder-main">
+    <div class="builder-bg-glows">
+      <div class="b-glow b-glow-1"></div>
+      <div class="b-glow b-glow-2"></div>
+    </div>
+
+    <div class="container builder-container-wrapper">
+      <div class="builder-header-section">
+        <span class="badge">Craft Your Sip</span>
+        <h1 class="builder-page-title">Interactive Juice Blender</h1>
+        <p class="builder-page-subtitle">Pick ingredients, drop them into the visualizer, and create a recipe customized for your body's wellness needs. When finished, lock your creation and pre-order a custom batch.</p>
+      </div>
+
+      <div class="builder-grid">
+        
+        <!-- BLENDER WORKSPACE (LEFT COLUMN) -->
+        <div class="blender-visualizer-column">
+          <div class="blender-frame glass-card">
+            
+            <!-- Custom Bottle Visualizer -->
+            <div class="blender-container">
+              <!-- Cap details -->
+              <div class="blender-cap cap-color-slate" id="blender-bottle-cap"></div>
+              
+              <!-- Transparent Glass Body -->
+              <div class="blender-glass-body" id="blender-dropzone">
+                <!-- Dropzone Indicator -->
+                <div class="drop-hint" id="drop-hint-text">Drag & Drop Ingredients Here</div>
+                
+                <!-- Blender Blades Area -->
+                <div class="blender-blades-hub">
+                  <span class="blade-prop prop-1"></span>
+                  <span class="blade-prop prop-2"></span>
+                </div>
+                
+                <!-- Dynamic Liquid Layer -->
+                <div class="blender-liquid" id="blender-liquid-fill">
+                  <div class="liquid-bubbles"></div>
+                </div>
+                
+                <!-- Rendered ingredients floating inside -->
+                <div class="blender-particles-layer" id="blender-particles"></div>
+              </div>
+            </div>
+
+            <!-- Custom Cap Selector UI -->
+            <div class="cap-selector-box">
+              <span class="cap-label">Select Cap Style</span>
+              <div class="cap-color-row">
+                <button class="cap-dot slate active" data-color="slate" aria-label="Slate Grey cap"></button>
+                <button class="cap-dot gold" data-color="gold" aria-label="Gold cap"></button>
+                <button class="cap-dot emerald" data-color="emerald" aria-label="Emerald Green cap"></button>
+                <button class="cap-dot rose" data-color="rose" aria-label="Rose Pink cap"></button>
+              </div>
+            </div>
+            
+            <div class="blender-actions-row">
+              <button class="btn btn-secondary btn-sm" id="blender-clear-btn">Reset Blender 🔄</button>
+              <button class="btn btn-primary btn-sm" id="blender-blend-btn" disabled>Blend Formula ⚡</button>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- PANTRY & DASHBOARD (RIGHT COLUMN) -->
+        <div class="builder-control-column">
+          
+          <!-- Ingredient Pantry Grid -->
+          <div class="pantry-card glass-card">
+            <h3 class="pantry-title">1. Ingredient Pantry <span class="subtitle-pantry">(Drag or Click to add - Max 5)</span></h3>
+            
+            <div class="pantry-grid" id="pantry-items-grid">
+              
+              <!-- Mango -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="mango">
+                <span class="ing-emoji">🥭</span>
+                <span class="ing-name">Alphonso Mango</span>
+                <span class="ing-tag sweetness">Sweet</span>
+              </div>
+
+              <!-- Orange -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="orange">
+                <span class="ing-emoji">🍊</span>
+                <span class="ing-name">Nagpur Orange</span>
+                <span class="ing-tag tanginess">Tangy</span>
+              </div>
+
+              <!-- Cherry -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="cherry">
+                <span class="ing-emoji">🍒</span>
+                <span class="ing-name">Wild Cherries</span>
+                <span class="ing-tag antioxidant">Antioxidant</span>
+              </div>
+
+              <!-- Blueberry -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="blueberry">
+                <span class="ing-emoji">🫐</span>
+                <span class="ing-name">Blueberry Pack</span>
+                <span class="ing-tag health">Vitamins</span>
+              </div>
+
+              <!-- Mint -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="mint">
+                <span class="ing-emoji">🍃</span>
+                <span class="ing-name">Organic Mint</span>
+                <span class="ing-tag fresh">Cooling</span>
+              </div>
+
+              <!-- Ginger -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="ginger">
+                <span class="ing-emoji">🫚</span>
+                <span class="ing-name">Fresh Ginger</span>
+                <span class="ing-tag spice">Zesty</span>
+              </div>
+
+              <!-- Spinach -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="spinach">
+                <span class="ing-emoji">🥬</span>
+                <span class="ing-name">Baby Spinach</span>
+                <span class="ing-tag iron">Iron Boost</span>
+              </div>
+
+              <!-- Chia -->
+              <div class="pantry-item glass-card" draggable="true" data-ing="chia">
+                <span class="ing-emoji">🌾</span>
+                <span class="ing-name">Chia Seeds</span>
+                <span class="ing-tag fiber">Fiber Pack</span>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Formula Dashboard (Stats & Customization) -->
+          <div class="formula-dashboard-card glass-card">
+            <h3 class="dashboard-title">2. Formula Analytics</h3>
+            
+            <div class="dashboard-inner-grid">
+              
+              <!-- Real-time taste bars -->
+              <div class="taste-analytics">
+                <h4>Taste Character</h4>
+                <div class="taste-meter-container">
+                  <div class="taste-meter-row">
+                    <span class="taste-label">Sweetness</span>
+                    <div class="taste-bar"><span class="taste-fill" id="fill-sweet" style="width: 0%"></span></div>
+                  </div>
+                  <div class="taste-meter-row">
+                    <span class="taste-label">Tanginess</span>
+                    <div class="taste-bar"><span class="taste-fill" id="fill-tangy" style="width: 0%"></span></div>
+                  </div>
+                  <div class="taste-meter-row">
+                    <span class="taste-label">Earthiness</span>
+                    <div class="taste-bar"><span class="taste-fill" id="fill-earthy" style="width: 0%"></span></div>
+                  </div>
+                  <div class="taste-meter-row">
+                    <span class="taste-label">Refreshment</span>
+                    <div class="taste-bar"><span class="taste-fill" id="fill-refresh" style="width: 0%"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Nutrition Facts -->
+              <div class="nutrition-analytics">
+                <h4>Nutrition Estimations</h4>
+                <div class="nutri-stats-grid">
+                  <div class="nutri-stat-box">
+                    <span class="num" id="nutri-calories">0</span>
+                    <span class="label">Est Calories</span>
+                  </div>
+                  <div class="nutri-stat-box">
+                    <span class="num" id="nutri-vitc">0%</span>
+                    <span class="label">Vitamin C</span>
+                  </div>
+                  <div class="nutri-stat-box">
+                    <span class="num" id="nutri-antiox">0%</span>
+                    <span class="label">Antioxidants</span>
+                  </div>
+                  <div class="nutri-stat-box">
+                    <span class="num" id="nutri-hydrate">0%</span>
+                    <span class="label">Hydration</span>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+
+            <!-- Custom Naming & Cart submission -->
+            <div class="naming-section">
+              <div class="form-group">
+                <label for="custom-blend-name">Name Your Masterpiece</label>
+                <input type="text" id="custom-blend-name" placeholder="Enter custom blend name..." maxlength="30">
+              </div>
+              
+              <button class="btn btn-primary btn-block" id="builder-checkout-btn" disabled>
+                Lock Recipe & Pre-Order Batch
+              </button>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="logo-wrapper" onclick="window.location.href='index.html'">
+          <span class="logo-emoji">🌿</span>
+          <span class="logo-text">NatureSip</span>
+        </div>
+        <p class="footer-tagline">Pure fruit infusion, crafted to nourish your soul.</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-column">
+          <h5>Explore</h5>
+          <a href="index.html#hero">Home</a>
+          <a href="index.html#flavors">Flavors</a>
+          <a href="index.html#benefits">Benefits</a>
+          <a href="quiz.html">Flavor Quiz</a>
+          <a href="pairing.html">Pairing Guide</a>
+          <a href="map.html">Sourcing Map</a>
+          <a href="builder.html">Craft Your Sip</a>
+        </div>
+        <div class="link-column">
+          <h5>Legal</h5>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+        <div class="link-column">
+          <h5>Connect</h5>
+          <a href="https://github.com/dasrahulprasad05-dev" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/rahul-prasad-das-7b1974370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://wa.me/919040786464" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="index.html#contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 NatureSip Premium. All rights reserved. Designed with passion.</p>
+    </div>
+  </footer>
+
+  <!-- Login / Sign In Modal Container -->
+  <div id="login-modal" class="login-modal-overlay hide"></div>
+
+  <script type="module" src="./builder.js"></script>
+</body>
+</html>

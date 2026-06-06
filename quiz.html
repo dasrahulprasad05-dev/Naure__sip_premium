@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureSip Quiz | Find Your Perfect Flavor</title>
+  <meta name="description" content="Discover your personalized NatureSip flavor. Take our quick 3-question lifestyle quiz and get a customized fruit infusion recommendation.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-content">
+      <div class="loader-circle-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-fruit-icon">🍒</div>
+      </div>
+      <h2 class="loader-title">NatureSip Quiz</h2>
+      <p class="loader-subtitle">Preparing quiz engine...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header" class="glass-header scrolled">
+    <div class="header-container">
+      <div class="logo-wrapper" onclick="window.location.href='index.html'">
+        <span class="logo-emoji">🌿</span>
+        <span class="logo-text">NatureSip</span>
+      </div>
+      <nav id="desktop-nav" class="nav-links">
+        <a href="index.html#hero" class="nav-link">Home</a>
+        <a href="index.html#flavors" class="nav-link">Flavors</a>
+        <a href="index.html#benefits" class="nav-link">Benefits</a>
+        <a href="quiz.html" class="nav-link active">Flavor Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link dropdown-trigger" onclick="return false;">Experiences ▾</a>
+          <div class="dropdown-menu glass-card">
+            <a href="pairing.html" class="dropdown-item">Pairing Guide</a>
+            <a href="map.html" class="dropdown-item">Sourcing Map</a>
+            <a href="builder.html" class="dropdown-item">Craft Your Sip</a>
+          </div>
+        </div>
+      </nav>
+      <!-- Sign In / User Profile Container -->
+      <div id="desktop-auth-container" class="auth-container"></div>
+      <div class="theme-toggle-wrapper">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <div class="cta-wrapper">
+        <a href="index.html#preorder" id="nav-cta-btn" class="btn btn-primary">Pre-Order Now</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="mobile-drawer">
+    <nav class="mobile-nav-links">
+      <a href="index.html#hero" class="mobile-nav-link">Home</a>
+      <a href="index.html#flavors" class="mobile-nav-link">Flavors</a>
+      <a href="index.html#benefits" class="mobile-nav-link">Benefits</a>
+      <a href="quiz.html" class="mobile-nav-link active">Flavor Quiz</a>
+      <a href="pairing.html" class="mobile-nav-link">Pairing Guide</a>
+      <a href="map.html" class="mobile-nav-link">Sourcing Map</a>
+      <a href="builder.html" class="mobile-nav-link">Craft Your Sip</a>
+      <!-- Mobile Sign In / User Profile Container -->
+      <div id="mobile-auth-container" class="mobile-auth-container"></div>
+      <div class="mobile-theme-toggle-row">
+        <span>Dark Mode</span>
+        <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <a href="index.html#preorder" class="mobile-nav-link btn-mobile-cta">Pre-Order Now</a>
+    </nav>
+  </div>
+
+  <!-- Main Quiz Container -->
+  <main class="quiz-main">
+    <div class="quiz-bg-glows">
+      <div class="q-glow q-glow-1"></div>
+      <div class="q-glow q-glow-2"></div>
+    </div>
+    
+    <div class="container quiz-container-wrapper">
+      <div class="quiz-wizard-card glass-card">
+        
+        <!-- INTRO FRAME -->
+        <div id="quiz-intro" class="quiz-frame">
+          <span class="badge">Find Your Infusion</span>
+          <h1 class="quiz-wizard-title">Which NatureSip Flavor Are You?</h1>
+          <p class="quiz-wizard-desc">Answer 3 simple questions about your lifestyle, wellness goals, and taste preferences to unlock your personalized fruit formula recommendation and get an exclusive discount code.</p>
+          <div class="intro-visual">
+            <span class="floating-emoji e1">🥭</span>
+            <span class="floating-emoji e2">🍊</span>
+            <span class="floating-emoji e3">🍉</span>
+            <span class="floating-emoji e4">🍵</span>
+          </div>
+          <button id="start-quiz-btn" class="btn btn-primary btn-large btn-pulse">Start the Quiz 🌿</button>
+        </div>
+
+        <!-- QUESTION FRAME -->
+        <div id="quiz-question" class="quiz-frame hide">
+          <div class="quiz-progress-wrapper">
+            <span id="quiz-question-counter" class="question-counter">Question 1 of 3</span>
+            <div class="quiz-progress-bar">
+              <div id="quiz-progress-fill" class="quiz-progress-fill" style="width: 33.3%"></div>
+            </div>
+          </div>
+          
+          <h2 id="quiz-question-text" class="quiz-question-title">Question Text?</h2>
+          
+          <div id="quiz-options-grid" class="quiz-options-grid">
+            <!-- Dynamically populated options -->
+          </div>
+        </div>
+
+        <!-- LOADING FRAME -->
+        <div id="quiz-loading" class="quiz-frame hide">
+          <div class="loader-circle-wrapper">
+            <div class="loader-circle"></div>
+            <div id="loading-fruit-spinner" class="loader-fruit-icon">🍉</div>
+          </div>
+          <h3 id="loading-status-text" class="loading-status-text">Squeezing organic juices...</h3>
+          <p class="loading-subtitle">Formulating your personalized recommendations</p>
+        </div>
+
+        <!-- RESULT FRAME -->
+        <div id="quiz-result" class="quiz-frame hide">
+          <div class="result-layout">
+            
+            <div class="result-visual">
+              <div class="result-bg-glow" id="result-glow"></div>
+              <div class="result-image-wrapper">
+                <img id="result-image" src="" alt="NatureSip Bottle">
+              </div>
+            </div>
+            
+            <div class="result-info">
+              <span class="badge" id="result-badge">Perfect Match 🏆</span>
+              <h2 class="result-title">You are <span id="result-flavor-name" class="highlight-text">Flavor Name</span>!</h2>
+              <p id="result-desc" class="result-desc">Detailed match description...</p>
+              
+              <div class="result-stats-row">
+                <div class="result-stat">
+                  <span class="stat-label">Price</span>
+                  <span class="stat-value" id="result-price">$24.99</span>
+                </div>
+                <div class="result-stat">
+                  <span class="stat-label">Calories</span>
+                  <span class="stat-value" id="result-calories">52 Kcal</span>
+                </div>
+                <div class="result-stat">
+                  <span class="stat-label">Rating</span>
+                  <span class="stat-value" id="result-rating">4.9 ★</span>
+                </div>
+              </div>
+
+              <div class="result-benefits-section">
+                <h4>Your Custom Benefits</h4>
+                <ul id="result-benefits" class="modal-benefits-list">
+                  <!-- Dynamically populated -->
+                </ul>
+              </div>
+              
+              <div class="result-taste-section">
+                <h4>Taste Profile</h4>
+                <div class="taste-meter-container" id="result-taste-meters">
+                  <!-- Dynamically populated -->
+                </div>
+              </div>
+
+              <!-- Email Capture / Offer block -->
+              <div class="quiz-offer-box glass-card" id="quiz-offer-container">
+                <h4 class="offer-title">🎁 Unlock 15% Off Your Match</h4>
+                <p class="offer-desc">Enter your email below to save your result and get an exclusive discount code in your inbox.</p>
+                <form id="quiz-email-form" class="offer-form" novalidate>
+                  <div class="form-group-row">
+                    <input type="email" id="quiz-user-email" placeholder="enter your email..." required>
+                    <button type="submit" class="btn btn-primary">Save Code</button>
+                  </div>
+                  <span class="error-msg" id="quiz-email-error">Please enter a valid email address</span>
+                </form>
+                <div id="quiz-offer-success" class="offer-success hide">
+                  <span class="code-badge">SIPMATCH15</span>
+                  <p>Check your inbox! Code copied to clipboard.</p>
+                </div>
+              </div>
+              
+              <div class="result-cta-row">
+                <button class="btn btn-primary" id="result-buy-btn">Secure Pre-Order</button>
+                <div class="result-secondary-btn-group">
+                  <button class="btn-card-details" id="result-share-btn">Share Result 🔗</button>
+                  <button class="btn-card-details" id="result-reset-btn">Retake Quiz 🔄</button>
+                </div>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Share toast alert notification -->
+  <div id="quiz-toast" class="quiz-toast-notification hide">
+    <span>Link copied to clipboard! Share the goodness 🌿</span>
+  </div>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="logo-wrapper" onclick="window.location.href='index.html'">
+          <span class="logo-emoji">🌿</span>
+          <span class="logo-text">NatureSip</span>
+        </div>
+        <p class="footer-tagline">Pure fruit infusion, crafted to nourish your soul.</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-column">
+          <h5>Explore</h5>
+          <a href="index.html#hero">Home</a>
+          <a href="index.html#flavors">Flavors</a>
+          <a href="index.html#benefits">Benefits</a>
+          <a href="quiz.html">Flavor Quiz</a>
+        </div>
+        <div class="link-column">
+          <h5>Legal</h5>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+        <div class="link-column">
+          <h5>Connect</h5>
+          <a href="https://github.com/dasrahulprasad05-dev" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/rahul-prasad-das-7b1974370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://wa.me/919040786464" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="index.html#contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 NatureSip Premium. All rights reserved. Designed with passion.</p>
+    </div>
+  </footer>
+
+  <!-- Login / Sign In Modal Container -->
+  <div id="login-modal" class="login-modal-overlay hide"></div>
+
+  <script type="module" src="./quiz.js"></script>
+</body>
+</html>

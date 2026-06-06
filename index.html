@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureSip Premium | Revitalize Your Senses</title>
+  <meta name="description" content="Experience NatureSip Premium, a sparkling blend of hand-picked fresh fruits, cherries, strawberries, and mangoes. 100% natural, zero artificial sugars.">
+  
+  <!-- SEO & Social Meta -->
+  <meta property="og:title" content="NatureSip Premium | Revitalize Your Senses">
+  <meta property="og:description" content="Experience NatureSip Premium, a sparkling blend of hand-picked fresh fruits, cherries, strawberries, and mangoes.">
+  <meta property="og:type" content="website">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-content">
+      <div class="loader-circle-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-fruit-icon">🍒</div>
+      </div>
+      <h2 class="loader-title">NatureSip Premium</h2>
+      <p class="loader-subtitle">Loading organic goodness...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header" class="glass-header">
+    <div class="header-container">
+      <div class="logo-wrapper" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+        <span class="logo-emoji">🌿</span>
+        <span class="logo-text">NatureSip</span>
+      </div>
+      <nav id="desktop-nav" class="nav-links">
+        <a href="index.html#hero" class="nav-link active">Home</a>
+        <a href="index.html#flavors" class="nav-link">Flavors</a>
+        <a href="index.html#benefits" class="nav-link">Benefits</a>
+        <a href="quiz.html" class="nav-link">Flavor Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link dropdown-trigger" onclick="return false;">Experiences ▾</a>
+          <div class="dropdown-menu glass-card">
+            <a href="pairing.html" class="dropdown-item">Pairing Guide</a>
+            <a href="map.html" class="dropdown-item">Sourcing Map</a>
+            <a href="builder.html" class="dropdown-item">Craft Your Sip</a>
+          </div>
+        </div>
+      </nav>
+      <!-- Sign In / User Profile Container -->
+      <div id="desktop-auth-container" class="auth-container"></div>
+      <div class="theme-toggle-wrapper">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <div class="cta-wrapper">
+        <a href="#preorder" id="nav-cta-btn" class="btn btn-primary">Pre-Order Now</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="mobile-drawer">
+    <nav class="mobile-nav-links">
+      <a href="index.html#hero" class="mobile-nav-link">Home</a>
+      <a href="index.html#flavors" class="mobile-nav-link">Flavors</a>
+      <a href="index.html#benefits" class="mobile-nav-link">Benefits</a>
+      <a href="quiz.html" class="mobile-nav-link">Flavor Quiz</a>
+      <a href="pairing.html" class="mobile-nav-link">Pairing Guide</a>
+      <a href="map.html" class="mobile-nav-link">Sourcing Map</a>
+      <a href="builder.html" class="mobile-nav-link">Craft Your Sip</a>
+      <!-- Mobile Sign In / User Profile Container -->
+      <div id="mobile-auth-container" class="mobile-auth-container"></div>
+      <div class="mobile-theme-toggle-row">
+        <span>Dark Mode</span>
+        <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <a href="#preorder" class="mobile-nav-link btn-mobile-cta">Pre-Order Now</a>
+    </nav>
+  </div>
+
+  <!-- Main Content Area -->
+  <main>
+
+    <!-- Hero / Full Screen Scroll Animation Section -->
+    <section id="hero" class="hero-animation-section">
+      <!-- Sticky Canvas Container -->
+      <div class="canvas-sticky-wrapper">
+        <canvas id="animation-canvas"></canvas>
+        <div class="hero-overlay-top"></div>
+        <div class="hero-overlay-bottom"></div>
+      </div>
+      
+      <!-- Bouncing Scroll Indicator (No Text) -->
+      <div class="scroll-indicator" id="scroll-indicator">
+        <span class="scroll-mouse">
+          <span class="scroll-wheel"></span>
+        </span>
+      </div>
+    </section>
+
+    <!-- Flavors Grid Section -->
+    <section id="flavors" class="flavors-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="badge">Our Lineup</span>
+          <h2 class="section-title">Explore Our Signature Blends</h2>
+          <p class="section-subtitle">A curated palette of fruit infusions designed to refresh your body and elevate your mood.</p>
+        </div>
+
+        <div class="flavors-grid">
+          <!-- Flavor 1: Alphonso Mango Royale -->
+          <div class="flavor-card glass-card mango-theme" data-flavor="mango">
+            <span class="badge-card best-seller">Best Seller 🏆</span>
+            <div class="flavor-bg-glow"></div>
+            <div class="flavor-image-wrapper">
+              <img src="/images/mango_bottle.png" alt="Alphonso Mango Royale" class="flavor-bottle-img">
+            </div>
+            <h3 class="flavor-title">Alphonso Mango Royale</h3>
+            <p class="flavor-desc">Premium mango juice crafted from sun-drenched Alphonso mangoes, offering a velvety texture and pure organic bliss.</p>
+            <div class="rating-reviews">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">4.9 ★ (3,120 reviews)</span>
+            </div>
+            <div class="price-pack">
+              <span class="price-val">$24.99</span>
+              <span class="pack-size">/ Pack of 6</span>
+            </div>
+            <div class="nutrition-highlights">
+              <span class="nutri-badge">Vitamins A & C</span>
+              <span class="nutri-badge">100% Alphonso</span>
+              <span class="nutri-badge">No Sugar Added</span>
+            </div>
+            <div class="taste-meter-container">
+              <div class="taste-meter-row">
+                <span class="taste-label">Sweetness</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 90%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Tanginess</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 30%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Energy</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 85%"></span></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="calories">52 Kcal</span>
+              <div class="card-btn-group">
+                <button class="btn-card-details" data-open-modal="mango">Details</button>
+                <button class="btn-card-cta">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flavor 2: Nagpur Orange Burst -->
+          <div class="flavor-card glass-card orange-theme" data-flavor="orange">
+            <div class="flavor-bg-glow"></div>
+            <div class="flavor-image-wrapper">
+              <img src="/images/orange_bottle.png" alt="Nagpur Orange Burst" class="flavor-bottle-img">
+            </div>
+            <h3 class="flavor-title">Nagpur Orange Burst</h3>
+            <p class="flavor-desc">Refreshing, zesty orange juice inspired by hand-picked premium Nagpur oranges for a tangy immune boost.</p>
+            <div class="rating-reviews">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">4.8 ★ (1,840 reviews)</span>
+            </div>
+            <div class="price-pack">
+              <span class="price-val">$22.99</span>
+              <span class="pack-size">/ Pack of 6</span>
+            </div>
+            <div class="nutrition-highlights">
+              <span class="nutri-badge">100% Vit C</span>
+              <span class="nutri-badge">Immune Shield</span>
+              <span class="nutri-badge">Organic Zest</span>
+            </div>
+            <div class="taste-meter-container">
+              <div class="taste-meter-row">
+                <span class="taste-label">Sweetness</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 70%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Tanginess</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 80%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Energy</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 75%"></span></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="calories">48 Kcal</span>
+              <div class="card-btn-group">
+                <button class="btn-card-details" data-open-modal="orange">Details</button>
+                <button class="btn-card-cta">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flavor 3: Mixed Fruit Supreme -->
+          <div class="flavor-card glass-card mixed-theme" data-flavor="mixed">
+            <span class="badge-card most-popular">Most Popular 🔥</span>
+            <div class="flavor-bg-glow"></div>
+            <div class="flavor-image-wrapper">
+              <img src="/images/mixed_fruit_bottle.png" alt="Mixed Fruit Supreme" class="flavor-bottle-img">
+            </div>
+            <h3 class="flavor-title">Mixed Fruit Supreme</h3>
+            <p class="flavor-desc">A premium, harmonious medley of Alphonso mango, Nagpur orange, crisp apples, and fresh forest berries.</p>
+            <div class="rating-reviews">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">4.9 ★ (4,250 reviews)</span>
+            </div>
+            <div class="price-pack">
+              <span class="price-val">$25.99</span>
+              <span class="pack-size">/ Pack of 6</span>
+            </div>
+            <div class="nutrition-highlights">
+              <span class="nutri-badge">Multi-Vitamin</span>
+              <span class="nutri-badge">Antioxidants</span>
+              <span class="nutri-badge">Prebiotics</span>
+            </div>
+            <div class="taste-meter-container">
+              <div class="taste-meter-row">
+                <span class="taste-label">Sweetness</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 85%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Tanginess</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 50%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Energy</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 80%"></span></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="calories">45 Kcal</span>
+              <div class="card-btn-group">
+                <button class="btn-card-details" data-open-modal="mixed">Details</button>
+                <button class="btn-card-cta">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flavor 4: Pomegranate Power -->
+          <div class="flavor-card glass-card pomegranate-theme" data-flavor="pomegranate">
+            <div class="flavor-bg-glow"></div>
+            <div class="flavor-image-wrapper">
+              <img src="/images/pomegranate_bottle.png" alt="Pomegranate Power" class="flavor-bottle-img">
+            </div>
+            <h3 class="flavor-title">Pomegranate Power</h3>
+            <p class="flavor-desc">A rich ruby nectar packed with vital antioxidants and natural electrolytes to revitalize and recharge your system.</p>
+            <div class="rating-reviews">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">4.7 ★ (1,560 reviews)</span>
+            </div>
+            <div class="price-pack">
+              <span class="price-val">$26.99</span>
+              <span class="pack-size">/ Pack of 6</span>
+            </div>
+            <div class="nutrition-highlights">
+              <span class="nutri-badge">Polyphenols</span>
+              <span class="nutri-badge">Heart Health</span>
+              <span class="nutri-badge">Energy Sourced</span>
+            </div>
+            <div class="taste-meter-container">
+              <div class="taste-meter-row">
+                <span class="taste-label">Sweetness</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 55%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Tanginess</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 75%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Energy</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 90%"></span></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="calories">58 Kcal</span>
+              <div class="card-btn-group">
+                <button class="btn-card-details" data-open-modal="pomegranate">Details</button>
+                <button class="btn-card-cta">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flavor 5: Watermelon Chill -->
+          <div class="flavor-card glass-card watermelon-theme" data-flavor="watermelon">
+            <div class="flavor-bg-glow"></div>
+            <div class="flavor-image-wrapper">
+              <img src="/images/watermelon_bottle.png" alt="Watermelon Chill" class="flavor-bottle-img">
+            </div>
+            <h3 class="flavor-title">Watermelon Chill</h3>
+            <p class="flavor-desc">Clean, hydrating watermelon juice infused with a splash of fresh organic mint leaves for ultimate summer recovery.</p>
+            <div class="rating-reviews">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">4.8 ★ (2,110 reviews)</span>
+            </div>
+            <div class="price-pack">
+              <span class="price-val">$21.99</span>
+              <span class="pack-size">/ Pack of 6</span>
+            </div>
+            <div class="nutrition-highlights">
+              <span class="nutri-badge">L-Citrulline</span>
+              <span class="nutri-badge">Hydration Pack</span>
+              <span class="nutri-badge">Mint Infusion</span>
+            </div>
+            <div class="taste-meter-container">
+              <div class="taste-meter-row">
+                <span class="taste-label">Sweetness</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 80%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Tanginess</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 20%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Energy</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 70%"></span></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="calories">38 Kcal</span>
+              <div class="card-btn-group">
+                <button class="btn-card-details" data-open-modal="watermelon">Details</button>
+                <button class="btn-card-cta">Buy Now</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Flavor 6: Blueberry Matcha Spark (Upcoming) -->
+          <div class="flavor-card glass-card matcha-theme upcoming-card" data-flavor="matcha">
+            <span class="badge-card most-popular" style="background: linear-gradient(135deg, #1d4ed8, #059669)">Coming Soon ⏳</span>
+            <div class="flavor-bg-glow"></div>
+            <div class="flavor-image-wrapper">
+              <img src="/images/blueberry_matcha_bottle.png" alt="Blueberry Matcha Spark" class="flavor-bottle-img">
+            </div>
+            <h3 class="flavor-title">Blueberry Matcha Spark</h3>
+            <p class="flavor-desc">An upcoming superfood fusion combining sweet antioxidant-rich blueberries, ceremonial Uji Matcha, and a touch of organic lavender.</p>
+            <div class="rating-reviews">
+              <span class="stars">★★★★★</span>
+              <span class="rating-text">5.0 ★ (Upcoming Launch)</span>
+            </div>
+            <div class="price-pack">
+              <span class="price-val">$27.99</span>
+              <span class="pack-size">/ Pack of 6</span>
+            </div>
+            <div class="nutrition-highlights">
+              <span class="nutri-badge">Antioxidants</span>
+              <span class="nutri-badge">Ceremonial Matcha</span>
+              <span class="nutri-badge">Lavender Calm</span>
+            </div>
+            <div class="taste-meter-container">
+              <div class="taste-meter-row">
+                <span class="taste-label">Sweetness</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 60%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Tanginess</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 40%"></span></div>
+              </div>
+              <div class="taste-meter-row">
+                <span class="taste-label">Energy</span>
+                <div class="taste-bar"><span class="taste-fill" style="width: 90%"></span></div>
+              </div>
+            </div>
+            <div class="card-footer">
+              <span class="calories">42 Kcal</span>
+              <div class="card-btn-group">
+                <button class="btn-card-details" data-open-modal="matcha">Details</button>
+                <button class="btn-card-cta">Notify Me</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Ingredients / Benefits Section -->
+    <section id="benefits" class="benefits-section">
+      <div class="container">
+        <div class="benefits-layout">
+          <div class="benefits-info">
+            <span class="badge">Formulated by Nature</span>
+            <h2 class="section-title">Packed with Botanical Superfoods</h2>
+            <p class="section-desc">NatureSip isn't just about delicious taste—it's a nutrient-dense elixir designed to enhance your daily wellness from the inside out.</p>
+            
+            <div class="benefits-accordion">
+              <div class="accordion-item active" id="benefit-antioxidants">
+                <div class="accordion-header">
+                  <span class="benefit-number">01</span>
+                  <h4>Rich in Antioxidants</h4>
+                  <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Our cherry and strawberry base contains powerful anthocyanins that help reduce oxidative stress, fight inflammation, and support muscle recovery after a workout.</p>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="benefit-immunity">
+                <div class="accordion-header">
+                  <span class="benefit-number">02</span>
+                  <h4>Immune System Shield</h4>
+                  <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                  <p>A single bottle delivers 100% of your daily required Vitamin C, extracted from fresh organic mangoes and citrus fruit slices, strengthening your natural defenses.</p>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="benefit-hydration">
+                <div class="accordion-header">
+                  <span class="benefit-number">03</span>
+                  <h4>Clean Hydration</h4>
+                  <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Pure mountain spring water infused with organic electrolytes keeps you hydrated naturally, without the crash of artificial sugary energy drinks.</p>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="benefit-vitc">
+                <div class="accordion-header">
+                  <span class="benefit-number">04</span>
+                  <h4>Vitamin C Boost</h4>
+                  <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Formulated with organic Nagpur oranges to deliver clean ascorbic acid, nourishing your skin and supporting cellular regeneration.</p>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="benefit-heart">
+                <div class="accordion-header">
+                  <span class="benefit-number">05</span>
+                  <h4>Cardiovascular Power</h4>
+                  <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                  <p>Active pomegranate seed polyphenols work to optimize blood flow, strengthen capillary walls, and combat vascular wear.</p>
+                </div>
+              </div>
+
+              <div class="accordion-item" id="benefit-watermelon">
+                <div class="accordion-header">
+                  <span class="benefit-number">06</span>
+                  <h4>Natural Electrolytes</h4>
+                  <span class="accordion-icon">+</span>
+                </div>
+                <div class="accordion-content">
+                  <p>High L-Citrulline content from cold-pressed watermelon helps flush lactic acid from muscles, ensuring quick post-workout recuperation.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="benefits-visual">
+            <div class="visual-container glass-card">
+              <div class="glowing-circle"></div>
+              
+              <div class="orbiting-fruits-container">
+                <!-- Slot 1 (Top Center): Cherry -->
+                <div class="orbit-slot" style="top: 0%; left: 50%;">
+                  <div class="interactive-fruit-node f-cherry active" data-target="benefit-antioxidants">
+                    <span class="node-emoji">🍒</span>
+                    <span class="node-glow"></span>
+                  </div>
+                </div>
+                <!-- Slot 2 (Top Right): Mango -->
+                <div class="orbit-slot" style="top: 25%; left: 93.3%;">
+                  <div class="interactive-fruit-node f-mango" data-target="benefit-immunity">
+                    <span class="node-emoji">🥭</span>
+                    <span class="node-glow"></span>
+                  </div>
+                </div>
+                <!-- Slot 3 (Bottom Right): Strawberry -->
+                <div class="orbit-slot" style="top: 75%; left: 93.3%;">
+                  <div class="interactive-fruit-node f-strawberry" data-target="benefit-hydration">
+                    <span class="node-emoji">🍓</span>
+                    <span class="node-glow"></span>
+                  </div>
+                </div>
+                <!-- Slot 4 (Bottom Center): Orange -->
+                <div class="orbit-slot" style="top: 100%; left: 50%;">
+                  <div class="interactive-fruit-node f-orange" data-target="benefit-vitc">
+                    <span class="node-emoji">🍊</span>
+                    <span class="node-glow"></span>
+                  </div>
+                </div>
+                <!-- Slot 5 (Bottom Left): Pomegranate -->
+                <div class="orbit-slot" style="top: 75%; left: 6.7%;">
+                  <div class="interactive-fruit-node f-pomegranate" data-target="benefit-heart">
+                    <span class="node-emoji">🍷</span>
+                    <span class="node-glow"></span>
+                  </div>
+                </div>
+                <!-- Slot 6 (Top Left): Watermelon -->
+                <div class="orbit-slot" style="top: 25%; left: 6.7%;">
+                  <div class="interactive-fruit-node f-watermelon" data-target="benefit-watermelon">
+                    <span class="node-emoji">🍉</span>
+                    <span class="node-glow"></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="focused-benefit-card">
+                <h4 id="focused-benefit-title">Antioxidant Boost</h4>
+                <p id="focused-benefit-text">Cherries combat free radicals and ease muscular soreness naturally.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Preorder / Newsletter Form Section -->
+    <section id="preorder" class="preorder-section">
+      <div class="container">
+        <div class="preorder-container glass-card">
+          <div class="preorder-glow-green"></div>
+          <div class="preorder-text">
+            <h2 class="preorder-title">Be the First to Sip</h2>
+            <p class="preorder-desc">We are releasing our limited-run NatureSip Premium batch next month. Secure your VIP pack today and get exclusive early-access discount rates.</p>
+            <div class="trust-indicators">
+              <span>✓ Free shipping on VIP packs</span>
+              <span>✓ 100% satisfaction guarantee</span>
+            </div>
+          </div>
+          
+          <div class="preorder-form-wrapper">
+            <form id="preorder-form" class="signup-form" novalidate>
+              <div class="form-group">
+                <label for="user-name">Your Name</label>
+                <input type="text" id="user-name" name="name" placeholder="John Doe" required>
+                <span class="error-msg" id="name-error">Please enter your name</span>
+              </div>
+              <div class="form-group">
+                <label for="user-email">Email Address</label>
+                <input type="email" id="user-email" name="email" placeholder="john@example.com" required>
+                <span class="error-msg" id="email-error">Please enter a valid email address</span>
+              </div>
+              <div class="form-group">
+                <label for="flavor-preference">Preferred Flavor</label>
+                <select id="flavor-preference" name="flavor">
+                  <option value="mango">Alphonso Mango Royale 🥭</option>
+                  <option value="orange">Nagpur Orange Burst 🍊</option>
+                  <option value="mixed">Mixed Fruit Supreme 🍓</option>
+                  <option value="pomegranate">Pomegranate Power 🍷</option>
+                  <option value="watermelon">Watermelon Chill 🍉</option>
+                  <option value="matcha">Blueberry Matcha Spark 🍵</option>
+                  <option value="custom" id="custom-option" class="hide">Custom Blend 🧪</option>
+                </select>
+              </div>
+              <button type="submit" id="submit-preorder-btn" class="btn btn-primary btn-block">
+                Secure Early Access
+              </button>
+            </form>
+
+            <div id="form-success" class="form-success-container hide">
+              <div class="success-icon">🎉</div>
+              <h3>You're on the VIP List!</h3>
+              <p>We've reserved your early access package. Check your inbox at <strong id="success-email">john@example.com</strong> for confirmation details.</p>
+              <button id="success-reset-btn" class="btn btn-secondary btn-sm">Sign Up Another Email</button>
+            </div>
+          </div>
+        </div>
+    </section>
+
+    <!-- Contact & Social Connect Section -->
+    <section id="contact" class="contact-section">
+      <div class="container">
+        <div class="contact-container glass-card">
+          <div class="contact-header">
+            <span class="badge">Get in Touch</span>
+            <h2 class="contact-title">Connect With Our Creator</h2>
+            <p class="contact-subtitle">Have questions about our premium infusions, want to collaborate, or share feedback? Connect with us directly.</p>
+          </div>
+          
+          <div class="social-grid">
+            <!-- GitHub -->
+            <a href="https://github.com/dasrahulprasad05-dev" target="_blank" rel="noopener noreferrer" class="social-card github" aria-label="GitHub">
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" class="svg-icon"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+              </div>
+              <span class="social-name">GitHub</span>
+              <span class="social-handle">@dasrahulprasad05-dev</span>
+            </a>
+
+            <!-- LinkedIn -->
+            <a href="https://www.linkedin.com/in/rahul-prasad-das-7b1974370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer" class="social-card linkedin" aria-label="LinkedIn">
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" class="svg-icon"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+              </div>
+              <span class="social-name">LinkedIn</span>
+              <span class="social-handle">Rahul Prasad Das</span>
+            </a>
+
+            <!-- WhatsApp -->
+            <a href="https://wa.me/919040786464" target="_blank" rel="noopener noreferrer" class="social-card whatsapp" aria-label="WhatsApp">
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" class="svg-icon"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.79-4.024c1.6.95 3.167 1.485 4.966 1.486 5.45 0 9.886-4.433 9.89-9.886.002-2.641-1.018-5.123-2.87-6.979C16.98 2.74 14.5 1.722 12.007 1.722c-5.455 0-9.893 4.434-9.897 9.889-.001 1.83.486 3.62 1.411 5.2l-.934 3.41 3.46-.908zm11.367-7.243c-.301-.15-1.78-.879-2.056-.979-.275-.1-.475-.15-.675.15-.2.3-.775.979-.95 1.179-.175.2-.35.225-.65.075-1.04-.519-1.834-1.019-2.625-2.378-.2-.35-.2-.549-.05-.699.13-.133.3-.35.45-.525.15-.175.2-.299.3-.499.1-.2.05-.375-.025-.525-.075-.15-.675-1.625-.925-2.225-.244-.588-.491-.508-.675-.518-.174-.01-.374-.012-.574-.012-.2 0-.525.075-.8.375-.275.3-1.05 1.025-1.05 2.5s1.075 2.9 1.225 3.1c.15.2 2.11 3.224 5.11 4.524.714.31 1.27.494 1.705.633.717.227 1.37.195 1.887.118.577-.087 1.78-.729 2.03-1.429.25-.7.25-1.3.175-1.429-.075-.125-.275-.2-.575-.35z"/></svg>
+              </div>
+              <span class="social-name">WhatsApp</span>
+              <span class="social-handle">+91 9040786464</span>
+            </a>
+
+            <!-- Instagram -->
+            <a href="#" class="social-card instagram" aria-label="Instagram">
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" class="svg-icon"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+              </div>
+              <span class="social-name">Instagram</span>
+              <span class="social-handle">@naturesip_premium</span>
+            </a>
+
+            <!-- Twitter -->
+            <a href="#" class="social-card twitter" aria-label="Twitter">
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" class="svg-icon"><path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/></svg>
+              </div>
+              <span class="social-name">Twitter</span>
+              <span class="social-handle">@naturesip</span>
+            </a>
+
+            <!-- Facebook -->
+            <a href="#" class="social-card facebook" aria-label="Facebook">
+              <div class="social-icon">
+                <svg viewBox="0 0 24 24" class="svg-icon"><path d="M9 8h-3v4h3v12h5v-12h3.642l.358-4h-4v-1.667c0-.955.192-1.333 1.115-1.333h2.885v-5h-3.808c-3.596 0-5.192 1.583-5.192 4.615v3.385z"/></svg>
+              </div>
+              <span class="social-name">Facebook</span>
+              <span class="social-handle">@naturesip.premium</span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="logo-wrapper" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+          <span class="logo-emoji">🌿</span>
+          <span class="logo-text">NatureSip</span>
+        </div>
+        <p class="footer-tagline">Pure fruit infusion, crafted to nourish your soul.</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-column">
+          <h5>Explore</h5>
+          <a href="index.html#hero">Home</a>
+          <a href="index.html#flavors">Flavors</a>
+          <a href="index.html#benefits">Benefits</a>
+          <a href="quiz.html">Flavor Quiz</a>
+        </div>
+        <div class="link-column">
+          <h5>Legal</h5>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+        <div class="link-column">
+          <h5>Connect</h5>
+          <a href="https://github.com/dasrahulprasad05-dev" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/rahul-prasad-das-7b1974370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://wa.me/919040786464" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="index.html#contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 NatureSip Premium. All rights reserved. Designed with passion.</p>
+    </div>
+  </footer>
+
+  <!-- Detail View Modal -->
+  <div id="flavor-modal" class="flavor-modal-overlay hide">
+    <div class="flavor-modal-container glass-card">
+      <button id="modal-close-btn" class="modal-close-btn" aria-label="Close modal">&times;</button>
+      <div class="modal-content-grid">
+        <div class="modal-visual">
+          <div class="modal-bg-glow" id="modal-glow"></div>
+          <div class="modal-image-wrapper">
+            <img id="modal-image" src="" alt="NatureSip Bottle">
+          </div>
+        </div>
+        <div class="modal-info">
+          <span class="badge" id="modal-badge">Premium Blend</span>
+          <h2 id="modal-title" class="modal-title">Flavor Title</h2>
+          <p id="modal-desc" class="modal-desc">Detailed Description...</p>
+          
+          <div class="modal-stats-row">
+            <div class="modal-stat">
+              <span class="stat-label">Price</span>
+              <span class="stat-value" id="modal-price">$0.00</span>
+            </div>
+            <div class="modal-stat">
+              <span class="stat-label">Calories</span>
+              <span class="stat-value" id="modal-calories">0 Kcal</span>
+            </div>
+            <div class="modal-stat">
+              <span class="stat-label">Rating</span>
+              <span class="stat-value" id="modal-rating">5.0 ★</span>
+            </div>
+          </div>
+          
+          <div class="modal-benefits-section">
+            <h4>Health & Sourcing Benefits</h4>
+            <ul id="modal-benefits" class="modal-benefits-list">
+              <!-- Dynamically populated -->
+            </ul>
+          </div>
+          
+          <div class="modal-taste-section">
+            <h4>Taste Profile</h4>
+            <div class="taste-meter-container" id="modal-taste-meters">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+          
+          <div class="modal-cta-row">
+            <button class="btn btn-primary" id="modal-buy-btn">Secure Pre-Order</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login / Sign In Modal Container -->
+  <div id="login-modal" class="login-modal-overlay hide"></div>
+
+  <script type="module" src="./main.js"></script>
+</body>
+</html>

@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureSip Sourcing Map | Farm-to-Bottle Traceability</title>
+  <meta name="description" content="Explore where our premium organic ingredients are grown. Click the interactive hotspots to trace your favorite sips back to their source.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-content">
+      <div class="loader-circle-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-fruit-icon">🗺️</div>
+      </div>
+      <h2 class="loader-title">NatureSip sourcing</h2>
+      <p class="loader-subtitle">Unfolding the globe...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header" class="glass-header scrolled">
+    <div class="header-container">
+      <div class="logo-wrapper" onclick="window.location.href='index.html'">
+        <span class="logo-emoji">🌿</span>
+        <span class="logo-text">NatureSip</span>
+      </div>
+      <nav id="desktop-nav" class="nav-links">
+        <a href="index.html#hero" class="nav-link">Home</a>
+        <a href="index.html#flavors" class="nav-link">Flavors</a>
+        <a href="index.html#benefits" class="nav-link">Benefits</a>
+        <a href="quiz.html" class="nav-link">Flavor Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link dropdown-trigger" onclick="return false;">Experiences ▾</a>
+          <div class="dropdown-menu glass-card">
+            <a href="pairing.html" class="dropdown-item">Pairing Guide</a>
+            <a href="map.html" class="dropdown-item">Sourcing Map</a>
+            <a href="builder.html" class="dropdown-item">Craft Your Sip</a>
+          </div>
+        </div>
+      </nav>
+      <!-- Sign In / User Profile Container -->
+      <div id="desktop-auth-container" class="auth-container"></div>
+      <div class="theme-toggle-wrapper">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <div class="cta-wrapper">
+        <a href="index.html#preorder" id="nav-cta-btn" class="btn btn-primary">Pre-Order Now</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="mobile-drawer">
+    <nav class="mobile-nav-links">
+      <a href="index.html#hero" class="mobile-nav-link">Home</a>
+      <a href="index.html#flavors" class="mobile-nav-link">Flavors</a>
+      <a href="index.html#benefits" class="mobile-nav-link">Benefits</a>
+      <a href="quiz.html" class="mobile-nav-link">Flavor Quiz</a>
+      <a href="pairing.html" class="mobile-nav-link">Pairing Guide</a>
+      <a href="map.html" class="mobile-nav-link active">Sourcing Map</a>
+      <a href="builder.html" class="mobile-nav-link">Craft Your Sip</a>
+      <!-- Mobile Sign In / User Profile Container -->
+      <div id="mobile-auth-container" class="mobile-auth-container"></div>
+      <div class="mobile-theme-toggle-row">
+        <span>Dark Mode</span>
+        <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <a href="index.html#preorder" class="mobile-nav-link btn-mobile-cta">Pre-Order Now</a>
+    </nav>
+  </div>
+
+  <!-- Sourcing Map Section -->
+  <main class="map-main">
+    <div class="map-bg-glows">
+      <div class="m-glow m-glow-1"></div>
+      <div class="m-glow m-glow-2"></div>
+    </div>
+
+    <div class="container map-container-wrapper">
+      <div class="map-header-section">
+        <span class="badge">100% Traceability</span>
+        <h1 class="map-page-title">Interactive Sourcing Map</h1>
+        <p class="map-page-subtitle">We source our premium ingredients exclusively from organic micro-climates. Hover over and click the pulsing hotspot pins to trace your sips back to their organic roots.</p>
+      </div>
+
+      <div class="map-grid">
+        
+        <!-- MAP PANEL (LEFT SIDE) -->
+        <div class="map-visualizer-column">
+          <div class="map-frame-wrapper glass-card">
+            <!-- Map Controls Overlay -->
+            <div class="map-controls">
+              <button id="map-zoom-in" title="Zoom In">+</button>
+              <button id="map-zoom-out" title="Zoom Out">−</button>
+              <button id="map-zoom-reset" class="reset-btn">Reset Zoom 🌐</button>
+            </div>
+            
+            <!-- Stylized Global Map SVG -->
+            <svg id="interactive-svg-map" viewBox="0 0 1000 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- Grid background lines -->
+              <g class="map-grid-lines">
+                <line x1="0" y1="100" x2="1000" y2="100" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="0" y1="200" x2="1000" y2="200" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="0" y1="300" x2="1000" y2="300" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="0" y1="400" x2="1000" y2="400" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="0" y1="500" x2="1000" y2="500" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="200" y1="0" x2="200" y2="600" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="400" y1="0" x2="400" y2="600" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="600" y1="0" x2="600" y2="600" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+                <line x1="800" y1="0" x2="800" y2="600" stroke="var(--glass-border)" stroke-dasharray="5,5"/>
+              </g>
+
+              <!-- Dynamic Sourcing Routes (Flight Lines) -->
+              <g class="sourcing-routes">
+                <path d="M 630,245 Q 610,290 635,335" class="sourcing-route" id="route-himalaya" />
+                <path d="M 615,320 Q 620,325 635,335" class="sourcing-route" id="route-konkan" />
+                <path d="M 645,315 Q 640,325 635,335" class="sourcing-route" id="route-nagpur" />
+                <path d="M 630,345 Q 632,340 635,335" class="sourcing-route" id="route-solapur" />
+                <path d="M 840,205 Q 740,240 635,335" class="sourcing-route" id="route-uji" />
+              </g>
+
+              <!-- Stylized World Map Silhouette Paths -->
+              <g class="map-continents-paths">
+                <!-- North America -->
+                <path d="M 50,120 Q 80,110 130,90 T 250,110 T 300,160 T 280,240 T 200,280 T 150,350 T 170,390 T 120,400 T 100,340 T 70,220 T 50,120 Z" class="continent-path"/>
+                <!-- South America -->
+                <path d="M 220,380 Q 250,390 280,410 T 320,450 T 280,550 T 240,580 T 220,530 T 200,450 T 220,380 Z" class="continent-path"/>
+                <!-- Eurasia / Africa (Merged representation) -->
+                <path d="M 400,100 Q 550,80 700,90 T 900,130 T 950,220 T 800,280 T 820,320 T 700,380 T 640,420 T 600,480 T 520,500 T 420,420 T 380,300 T 400,200 T 400,100 Z" class="continent-path"/>
+                <!-- India Subcontinent (Exaggerated for pins) -->
+                <path d="M 600,280 L 615,310 L 630,340 L 645,365 L 660,340 L 670,310 L 680,285 Z" class="continent-path focus-continent"/>
+                <!-- Japan Islands -->
+                <path d="M 820,180 Q 840,190 850,220 M 835,170 Q 845,180 855,190" stroke="var(--text-secondary)" stroke-width="4" stroke-linecap="round"/>
+                <!-- Australia -->
+                <path d="M 780,430 Q 840,420 880,450 T 850,520 T 780,480 T 780,430 Z" class="continent-path"/>
+              </g>
+
+              <!-- Central Bottling Hub Pin -->
+              <g class="map-hub" id="pin-hub">
+                <circle cx="635" cy="335" r="14" class="hub-pulse-ring" />
+                <circle cx="635" cy="335" r="6" fill="var(--accent-green)" />
+                <text x="635" y="360" text-anchor="middle" class="hub-label">Bottling Hub 🏭</text>
+              </g>
+
+              <!-- HOTSPOT MARKERS (Interactive SVG Elements) -->
+              
+              <!-- Hotspot 1: Himalayan Foothills (Water) -->
+              <g class="map-hotspot active" id="pin-himalaya" data-region="himalaya">
+                <circle cx="630" cy="245" r="22" class="pulse-ring circle-himalaya" />
+                <circle cx="630" cy="245" r="8" class="pin-dot circle-himalaya" />
+                <text x="630" y="225" text-anchor="middle" class="pin-label">Himalayan Foothills 💧</text>
+              </g>
+
+              <!-- Hotspot 2: Konkan Coast (Mango) -->
+              <g class="map-hotspot" id="pin-konkan" data-region="konkan">
+                <circle cx="615" cy="320" r="22" class="pulse-ring circle-konkan" />
+                <circle cx="615" cy="320" r="8" class="pin-dot circle-konkan" />
+                <text x="560" y="325" text-anchor="middle" class="pin-label">Konkan Coast 🥭</text>
+              </g>
+
+              <!-- Hotspot 3: Nagpur (Orange) -->
+              <g class="map-hotspot" id="pin-nagpur" data-region="nagpur">
+                <circle cx="645" cy="315" r="22" class="pulse-ring circle-nagpur" />
+                <circle cx="645" cy="315" r="8" class="pin-dot circle-nagpur" />
+                <text x="680" y="310" text-anchor="middle" class="pin-label">Nagpur Region 🍊</text>
+              </g>
+
+              <!-- Hotspot 4: Solapur Valley (Pomegranate) -->
+              <g class="map-hotspot" id="pin-solapur" data-region="solapur">
+                <circle cx="630" cy="345" r="22" class="pulse-ring circle-solapur" />
+                <circle cx="630" cy="345" r="8" class="pin-dot circle-solapur" />
+                <text x="630" y="380" text-anchor="middle" class="pin-label">Solapur Valley 🍷</text>
+              </g>
+
+              <!-- Hotspot 5: Uji, Kyoto (Matcha) -->
+              <g class="map-hotspot" id="pin-uji" data-region="uji">
+                <circle cx="840" cy="205" r="22" class="pulse-ring circle-uji" />
+                <circle cx="840" cy="205" r="8" class="pin-dot circle-uji" />
+                <text x="840" y="175" text-anchor="middle" class="pin-label">Uji, Japan 🍵</text>
+              </g>
+            </svg>
+            
+            <div class="map-legend">
+              <span class="legend-item"><span class="legend-dot circle-himalaya"></span> Mountain Spring Water</span>
+              <span class="legend-item"><span class="legend-dot circle-konkan"></span> Alphonso Mango</span>
+              <span class="legend-item"><span class="legend-dot circle-nagpur"></span> Nagpur Orange</span>
+              <span class="legend-item"><span class="legend-dot circle-solapur"></span> Pomegranate Nectar</span>
+              <span class="legend-item"><span class="legend-dot circle-uji"></span> Ceremonial Matcha</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- DETAILS PANEL (RIGHT SIDE) -->
+        <div class="sourcing-details-column">
+          <div class="sourcing-details-card glass-card" id="source-details-card">
+            
+            <span class="badge-card" id="source-badge">Purity Sourced 🏔️</span>
+            <h2 class="source-region-title" id="source-title">Himalayan Foothills</h2>
+            <p class="source-desc" id="source-desc-text">Our water base begins in the melting glaciers of the Himalayas. Naturally filtered through mineral-rich rock layers for decades, it emerges clean, pH balanced, and loaded with cellular electrolytes.</p>
+            
+            <hr class="card-divider">
+
+            <!-- Farmer Spotlight -->
+            <div class="farmer-spotlight-section">
+              <h4>Our Harvesting Partner</h4>
+              <div class="farmer-row">
+                <div class="farmer-avatar" id="farmer-img">🏔️</div>
+                <div class="farmer-info">
+                  <span class="farmer-name" id="farmer-name-text">Local Spring Keepers</span>
+                  <span class="farmer-role" id="farmer-role-text">Eco-Conservation Guild</span>
+                  <p class="farmer-quote" id="farmer-quote-text">"We protect the glacial spring paths, ensuring zero chemical runoff enters the water cycle before filtration."</p>
+                </div>
+              </div>
+            </div>
+
+            <hr class="card-divider">
+
+            <!-- Ecological metrics & Carbon Footprint -->
+            <div class="eco-metrics-section">
+              <h4>Ecological Impact Dashboard</h4>
+              
+              <div class="eco-stats-grid">
+                <div class="eco-stat-item">
+                  <span class="eco-val-label">Organic Certified</span>
+                  <span class="eco-val" id="eco-cert-val">100% Natural</span>
+                </div>
+                <div class="eco-stat-item">
+                  <span class="eco-val-label">Water System</span>
+                  <span class="eco-val" id="eco-water-val">Glacial Runoff</span>
+                </div>
+              </div>
+
+              <div class="carbon-impact-box">
+                <div class="carbon-wheel-wrapper">
+                  <svg class="progress-ring-svg" width="80" height="80">
+                    <circle class="ring-bg" stroke="var(--glass-border)" stroke-width="6" fill="transparent" r="32" cx="40" cy="40"/>
+                    <circle class="ring-fill" id="carbon-ring-fill" stroke="var(--accent-green)" stroke-width="6" fill="transparent" r="32" cx="40" cy="40" stroke-dasharray="201" stroke-dashoffset="40"/>
+                  </svg>
+                  <div class="carbon-number" id="carbon-offset-num">80%</div>
+                </div>
+                <div class="carbon-desc">
+                  <span class="carbon-title">Carbon Offset Rating</span>
+                  <p id="carbon-desc-text">Filtered on-site to reduce raw bulk transport weight. Offset saves 140g CO2 equivalent per shipping bottle.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="source-action-row">
+              <button class="btn btn-primary btn-block" id="source-cta-btn">View Mango Royale</button>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="logo-wrapper" onclick="window.location.href='index.html'">
+          <span class="logo-emoji">🌿</span>
+          <span class="logo-text">NatureSip</span>
+        </div>
+        <p class="footer-tagline">Pure fruit infusion, crafted to nourish your soul.</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-column">
+          <h5>Explore</h5>
+          <a href="index.html#hero">Home</a>
+          <a href="index.html#flavors">Flavors</a>
+          <a href="index.html#benefits">Benefits</a>
+          <a href="quiz.html">Flavor Quiz</a>
+          <a href="pairing.html">Pairing Guide</a>
+          <a href="map.html">Sourcing Map</a>
+          <a href="builder.html">Craft Your Sip</a>
+        </div>
+        <div class="link-column">
+          <h5>Legal</h5>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+        <div class="link-column">
+          <h5>Connect</h5>
+          <a href="https://github.com/dasrahulprasad05-dev" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/rahul-prasad-das-7b1974370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://wa.me/919040786464" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="index.html#contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 NatureSip Premium. All rights reserved. Designed with passion.</p>
+    </div>
+  </footer>
+
+  <!-- Login / Sign In Modal Container -->
+  <div id="login-modal" class="login-modal-overlay hide"></div>
+
+  <script type="module" src="./map.js"></script>
+</body>
+</html>

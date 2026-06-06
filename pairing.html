@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureSip Pairing Guide | Wellness Food & Juice Synergy</title>
+  <meta name="description" content="Discover the perfect health and flavor pairings. Use our visual dinner plate engine to match nutritious meals with NatureSip organic juices.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-content">
+      <div class="loader-circle-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-fruit-icon">🥗</div>
+      </div>
+      <h2 class="loader-title">NatureSip pairing</h2>
+      <p class="loader-subtitle">Setting up the dining table...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header" class="glass-header scrolled">
+    <div class="header-container">
+      <div class="logo-wrapper" onclick="window.location.href='index.html'">
+        <span class="logo-emoji">🌿</span>
+        <span class="logo-text">NatureSip</span>
+      </div>
+      <nav id="desktop-nav" class="nav-links">
+        <a href="index.html#hero" class="nav-link">Home</a>
+        <a href="index.html#flavors" class="nav-link">Flavors</a>
+        <a href="index.html#benefits" class="nav-link">Benefits</a>
+        <a href="quiz.html" class="nav-link">Flavor Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link dropdown-trigger" onclick="return false;">Experiences ▾</a>
+          <div class="dropdown-menu glass-card">
+            <a href="pairing.html" class="dropdown-item">Pairing Guide</a>
+            <a href="map.html" class="dropdown-item">Sourcing Map</a>
+            <a href="builder.html" class="dropdown-item">Craft Your Sip</a>
+          </div>
+        </div>
+      </nav>
+      <!-- Sign In / User Profile Container -->
+      <div id="desktop-auth-container" class="auth-container"></div>
+      <div class="theme-toggle-wrapper">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <div class="cta-wrapper">
+        <a href="index.html#preorder" id="nav-cta-btn" class="btn btn-primary">Pre-Order Now</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="mobile-drawer">
+    <nav class="mobile-nav-links">
+      <a href="index.html#hero" class="mobile-nav-link">Home</a>
+      <a href="index.html#flavors" class="mobile-nav-link">Flavors</a>
+      <a href="index.html#benefits" class="mobile-nav-link">Benefits</a>
+      <a href="quiz.html" class="mobile-nav-link">Flavor Quiz</a>
+      <a href="pairing.html" class="mobile-nav-link active">Pairing Guide</a>
+      <a href="map.html" class="mobile-nav-link">Sourcing Map</a>
+      <a href="builder.html" class="mobile-nav-link">Craft Your Sip</a>
+      <!-- Mobile Sign In / User Profile Container -->
+      <div id="mobile-auth-container" class="mobile-auth-container"></div>
+      <div class="mobile-theme-toggle-row">
+        <span>Dark Mode</span>
+        <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <a href="index.html#preorder" class="mobile-nav-link btn-mobile-cta">Pre-Order Now</a>
+    </nav>
+  </div>
+
+  <!-- Main Pairing Section -->
+  <main class="pairing-main">
+    <div class="pairing-bg-glows">
+      <div class="p-glow p-glow-1"></div>
+      <div class="p-glow p-glow-2"></div>
+    </div>
+
+    <div class="container pairing-container-wrapper">
+      <div class="pairing-header-section">
+        <span class="badge">Nutritional Synergy</span>
+        <h1 class="pairing-page-title">Healthy Food & Juice Pairing Guide</h1>
+        <p class="pairing-page-subtitle">Select a healthy meal option to see its scientifically recommended NatureSip beverage companion and discover how their nutritional profiles work together in synergy.</p>
+      </div>
+
+      <div class="pairing-grid">
+        
+        <!-- MEAL LIST (LEFT SIDE) -->
+        <div class="meal-list-column">
+          <h3 class="column-title">1. Choose a Meal</h3>
+          <div class="meal-options-container">
+            
+            <!-- Option 1 -->
+            <button class="meal-card glass-card active" data-meal="avocado">
+              <div class="meal-avatar">🥑</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Avocado Toast</span>
+                <span class="meal-type">Healthy Fats & Dietary Fiber</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 2 -->
+            <button class="meal-card glass-card" data-meal="quinoa">
+              <div class="meal-avatar">🥗</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Quinoa Buddha Bowl</span>
+                <span class="meal-type">Complex Carbs & Plant Protein</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 3 -->
+            <button class="meal-card glass-card" data-meal="salmon">
+              <div class="meal-avatar">🐟</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Grilled Salmon</span>
+                <span class="meal-type">Omega-3 & Lean Protein</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 4 -->
+            <button class="meal-card glass-card" data-meal="tofu">
+              <div class="meal-avatar">🍳</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Spicy Tofu Scramble</span>
+                <span class="meal-type">Zesty Plant Protein</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 5 -->
+            <button class="meal-card glass-card" data-meal="acai">
+              <div class="meal-avatar">🍧</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Acai Berry Bowl</span>
+                <span class="meal-type">Antioxidant Power Pack</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 6 -->
+            <button class="meal-card glass-card" data-meal="greek">
+              <div class="meal-avatar">🥗</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Greek Salad</span>
+                <span class="meal-type">Hydration & Minerals</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 7 -->
+            <button class="meal-card glass-card" data-meal="oatmeal">
+              <div class="meal-avatar">🥣</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Almond Oatmeal</span>
+                <span class="meal-type">Slow-Release Energy & Fiber</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 8 -->
+            <button class="meal-card glass-card" data-meal="chicken">
+              <div class="meal-avatar">🍗</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Steamed Chicken</span>
+                <span class="meal-type">Lean Protein & Muscle Recovery</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 9 -->
+            <button class="meal-card glass-card" data-meal="potato">
+              <div class="meal-avatar">🍠</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Sweet Potato Fries</span>
+                <span class="meal-type">Carotenoids & Immune Support</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 10 -->
+            <button class="meal-card glass-card" data-meal="chia">
+              <div class="meal-avatar">🍮</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Chia Pudding</span>
+                <span class="meal-type">Brain-Healthy Omega-3s</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 11 -->
+            <button class="meal-card glass-card" data-meal="hummus">
+              <div class="meal-avatar">🥕</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Hummus & Carrots</span>
+                <span class="meal-type">Gut-Friendly Fiber & Vit A</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 12 -->
+            <button class="meal-card glass-card" data-meal="nuts">
+              <div class="meal-avatar">🥜</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Nuts & Seeds Mix</span>
+                <span class="meal-type">Heart-Healthy Lipids</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 13 -->
+            <button class="meal-card glass-card" data-meal="kale">
+              <div class="meal-avatar">🥬</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Kale & Apple Salad</span>
+                <span class="meal-type">Iron & Vitamin C Boost</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 14 -->
+            <button class="meal-card glass-card" data-meal="lentils">
+              <div class="meal-avatar">🍛</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Rice & Lentils</span>
+                <span class="meal-type">Essential Amino Acids</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+
+            <!-- Option 15 -->
+            <button class="meal-card glass-card" data-meal="omelette">
+              <div class="meal-avatar">🍳</div>
+              <div class="meal-info-block">
+                <span class="meal-name">Spinach Omelette</span>
+                <span class="meal-type">Iron & Protein Synergy</span>
+              </div>
+              <span class="meal-chevron">❯</span>
+            </button>
+            
+          </div>
+        </div>
+
+        <!-- DINNER PLATE VISUALIZER (CENTER) -->
+        <div class="plate-visualizer-column">
+          <div class="plate-wrapper glass-card">
+            <div class="dining-mat"></div>
+            <!-- Interactive Plate -->
+            <div class="dinner-plate" id="dinner-plate">
+              <div class="plate-rim"></div>
+              <div class="plate-inner">
+                <div class="meal-emoji-display" id="meal-emoji-display">🥑</div>
+              </div>
+            </div>
+            <!-- Interactive Juice Bottle next to plate -->
+            <div class="bottle-placement" id="bottle-placement">
+              <img id="paired-bottle-img" src="/images/pomegranate_bottle.png" alt="Paired NatureSip Bottle">
+              <div class="bottle-glow" id="bottle-glow"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SYNERGY PANEL (RIGHT SIDE) -->
+        <div class="synergy-panel-column">
+          <div class="synergy-card glass-card" id="synergy-details-card">
+            <span class="badge-card" id="juice-badge">Perfect Match 🏆</span>
+            <h2 class="juice-match-title" id="juice-title">Pomegranate Power</h2>
+            
+            <p class="synergy-summary" id="synergy-summary-text">Avocado Toast's healthy monounsaturated fats dramatically boost the absorption of pomegranate's oil-soluble antioxidants and cardiovascular polyphenols.</p>
+            
+            <!-- Synergy stats bar/progress -->
+            <div class="synergy-stats-box">
+              <div class="synergy-progress-row">
+                <span class="synergy-stat-label">Nutritional Absorption Boost</span>
+                <div class="synergy-progress-bar">
+                  <div class="synergy-progress-fill" id="synergy-boost-fill" style="width: 85%"></div>
+                </div>
+                <span class="synergy-stat-val" id="synergy-boost-val">+85% Synergy</span>
+              </div>
+            </div>
+
+            <!-- Detailed synergy points -->
+            <div class="synergy-points-section">
+              <h4>Health & Taste Harmony</h4>
+              <ul class="synergy-bullet-list" id="synergy-bullet-list">
+                <li>Healthy plant lipids in Avocado enhance the bio-availability of Pomegranate polyphenols.</li>
+                <li>The deep, mildly tart pomegranate juice cuts through the rich creaminess of the ripe avocado.</li>
+                <li>Supplies natural potassium and active iron to help balance daily cellular fluids.</li>
+              </ul>
+            </div>
+
+            <!-- Taste Profile -->
+            <div class="taste-profile-section">
+              <h4>Combined Taste Profile</h4>
+              <div class="taste-meter-container" id="pairing-taste-meters">
+                <!-- Loaded dynamically -->
+              </div>
+            </div>
+
+            <div class="synergy-cta-row">
+              <button class="btn btn-primary btn-block" id="pair-order-btn">Secure Pre-Order Pack</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="main-footer">
+    <div class="container footer-content">
+      <div class="footer-brand">
+        <div class="logo-wrapper" onclick="window.location.href='index.html'">
+          <span class="logo-emoji">🌿</span>
+          <span class="logo-text">NatureSip</span>
+        </div>
+        <p class="footer-tagline">Pure fruit infusion, crafted to nourish your soul.</p>
+      </div>
+      <div class="footer-links">
+        <div class="link-column">
+          <h5>Explore</h5>
+          <a href="index.html#hero">Home</a>
+          <a href="index.html#flavors">Flavors</a>
+          <a href="index.html#benefits">Benefits</a>
+          <a href="quiz.html">Flavor Quiz</a>
+          <a href="pairing.html">Pairing Guide</a>
+          <a href="map.html">Sourcing Map</a>
+          <a href="builder.html">Craft Your Sip</a>
+        </div>
+        <div class="link-column">
+          <h5>Legal</h5>
+          <a href="#">Privacy Policy</a>
+          <a href="#">Terms of Service</a>
+          <a href="#">Refund Policy</a>
+        </div>
+        <div class="link-column">
+          <h5>Connect</h5>
+          <a href="https://github.com/dasrahulprasad05-dev" target="_blank" rel="noopener noreferrer">GitHub</a>
+          <a href="https://www.linkedin.com/in/rahul-prasad-das-7b1974370?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://wa.me/919040786464" target="_blank" rel="noopener noreferrer">WhatsApp</a>
+          <a href="index.html#contact">Contact Us</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 NatureSip Premium. All rights reserved. Designed with passion.</p>
+    </div>
+  </footer>
+
+  <!-- Login / Sign In Modal Container -->
+  <div id="login-modal" class="login-modal-overlay hide"></div>
+
+  <script type="module" src="./pairing.js"></script>
+</body>
+</html>
