@@ -23,3 +23,5 @@ backend/.env
 backend/logs/
 backend/scratch/
 
+
+.vercel
