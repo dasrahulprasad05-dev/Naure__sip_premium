@@ -3,7 +3,9 @@
    ========================================================================== */
 import { initAuth } from './auth.js';
 
-const API_URL = 'https://naure-sip-premium.onrender.com/api';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000/api'
+  : 'https://naure-sip-premium.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Authentication State
@@ -754,26 +756,28 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // Handle buy buttons navigation to preorder form
-  const navigateToPreorder = (flavorKey) => {
-    closeFlavorModal();
-    
-    // Smooth scroll to preorder section
-    const preorderSection = document.getElementById('preorder');
-    if (preorderSection) {
-      preorderSection.scrollIntoView({ behavior: 'smooth' });
-    }
+  const FLAVOR_TO_PRODUCT_ID = {
+    'mango': 'a0f1b2c3-d4e5-4f6a-9b0c-1d2e3f4a5b6c',
+    'orange': 'b1f2c3d4-e5f6-4a7b-8c9d-0e1f2a3b4c5d',
+    'mixed': 'c2f3d4e5-f6a7-4b8c-9d0e-1f2a-3b4c5d6e7f8a',
+    'pomegranate': 'd3f4e5f6-a7b8-4c9d-0e1f-2a3b4c5d6e7f',
+    'watermelon': 'e4f5e6a7-b8c9-4d0e-1f2a-3b4c5d6e7f8a',
+    'matcha': 'f5f6e7a8-b9c0-4d1e-2f3a-4b5c6d7e8f9a',
+    'custom': '06f7e8a9-b0c1-4d2e-3f4a-5b6c7d8e9f0a'
+  };
 
-    // Set dropdown value
-    const flavorSelect = document.getElementById('flavor-preference');
-    if (flavorSelect && flavorKey) {
-      flavorSelect.value = flavorKey;
+  // Handle buy buttons adding to cart
+  const handleBuyClick = (flavorKey) => {
+    closeFlavorModal();
+    const productId = FLAVOR_TO_PRODUCT_ID[flavorKey];
+    if (productId) {
+      window.addItemToCart(productId, null, 1);
     }
   };
 
   // Buy button inside modal
   modalBuyBtn.addEventListener('click', () => {
-    navigateToPreorder(activeFlavorKey);
+    handleBuyClick(activeFlavorKey);
   });
 
   // Buy buttons inside each flavor card
@@ -783,7 +787,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     if (buyBtn && flavorKey) {
       buyBtn.addEventListener('click', () => {
-        navigateToPreorder(flavorKey);
+        handleBuyClick(flavorKey);
       });
     }
 
@@ -846,4 +850,304 @@ document.addEventListener('DOMContentLoaded', () => {
       localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
     });
   });
+
+  // 10. Shopping Cart Functionality & Event Handlers
+  const cartDrawer = document.getElementById('cart-drawer');
+  const cartToggleBtn = document.getElementById('cart-toggle-btn');
+  const cartCloseBtn = document.getElementById('cart-drawer-close-btn');
+  const cartItemsContainer = document.getElementById('cart-items-container');
+  const cartCountBadge = document.getElementById('cart-count-badge');
+  const cartDrawerCount = document.getElementById('cart-drawer-count');
+  const cartDrawerFooter = document.getElementById('cart-drawer-footer');
+  const cartDrawerSubtotal = document.getElementById('cart-drawer-subtotal');
+  const cartClearBtn = document.getElementById('cart-clear-btn');
+  const cartCheckoutBtn = document.getElementById('cart-checkout-btn');
+
+  let cart = { items: [], subtotal: 0, total_items: 0 };
+
+  const getAuthHeaders = () => {
+    const token = localStorage.getItem('token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+    return headers;
+  };
+
+  const isUserLoggedIn = () => {
+    return !!localStorage.getItem('token');
+  };
+
+  const showCartDrawer = () => {
+    if (!isUserLoggedIn()) {
+      // Trigger sign-in modal
+      document.getElementById('nav-signin-btn')?.click();
+      document.getElementById('mobile-signin-btn')?.click();
+      alert("Please sign in to access your shopping cart 🛒");
+      return;
+    }
+    cartDrawer.classList.remove('hide');
+    document.body.style.overflow = 'hidden';
+    fetchCart();
+  };
+
+  const hideCartDrawer = () => {
+    cartDrawer.classList.add('hide');
+    document.body.style.overflow = '';
+  };
+
+  const updateCartBadgeUI = () => {
+    if (!isUserLoggedIn()) {
+      cartCountBadge.classList.add('hide');
+      return;
+    }
+    const totalItems = cart.total_items;
+    if (totalItems > 0) {
+      cartCountBadge.innerText = totalItems;
+      cartCountBadge.classList.remove('hide');
+    } else {
+      cartCountBadge.classList.add('hide');
+    }
+  };
+
+  const fetchCart = () => {
+    if (!isUserLoggedIn()) return;
+    fetch(`${API_URL}/cart`, {
+      method: 'GET',
+      headers: getAuthHeaders()
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        cart = data.cart;
+        renderCart();
+      }
+    })
+    .catch(err => console.error("Error fetching cart:", err));
+  };
+
+  const renderCart = () => {
+    cartDrawerCount.innerText = cart.total_items;
+    updateCartBadgeUI();
+
+    if (!cart.items || cart.items.length === 0) {
+      cartItemsContainer.innerHTML = `
+        <div class="empty-cart-message">
+          <span class="empty-cart-icon">🛒</span>
+          <p>Your shopping cart is currently empty.</p>
+          <button id="cart-back-shopping" class="btn btn-secondary btn-sm">Start Shopping</button>
+        </div>
+      `;
+      cartDrawerFooter.classList.add('hide');
+      
+      // Hook the back to shopping button
+      document.getElementById('cart-back-shopping')?.addEventListener('click', hideCartDrawer);
+      return;
+    }
+
+    cartDrawerFooter.classList.remove('hide');
+    cartDrawerSubtotal.innerText = `$${parseFloat(cart.subtotal).toFixed(2)}`;
+
+    cartItemsContainer.innerHTML = cart.items.map(item => {
+      const img = item.image_url || '/images/custom_bottle.png';
+      const name = item.name || item.blend_name || 'NatureSip Blend';
+      const sku = item.sku || 'NS-CUSTOM';
+      const price = parseFloat(item.price).toFixed(2);
+      return `
+        <div class="cart-item-card">
+          <div class="cart-item-img-wrapper">
+            <img src="${img}" alt="${name}">
+          </div>
+          <div class="cart-item-details">
+            <h4 class="cart-item-name">${name}</h4>
+            <span class="cart-item-sku">${sku}</span>
+            <span class="cart-item-price">$${price}</span>
+            <div class="cart-qty-control">
+              <button class="cart-qty-btn decrease-qty-btn" data-id="${item.id}" data-qty="${item.quantity}">-</button>
+              <span class="cart-qty-val">${item.quantity}</span>
+              <button class="cart-qty-btn increase-qty-btn" data-id="${item.id}" data-qty="${item.quantity}">+</button>
+            </div>
+          </div>
+          <div class="cart-item-actions">
+            <button class="cart-item-remove-btn" data-id="${item.id}">&times;</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    bindCartItemEvents();
+  };
+
+  const bindCartItemEvents = () => {
+    // Decrease Quantity
+    cartItemsContainer.querySelectorAll('.decrease-qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemId = btn.getAttribute('data-id');
+        const currentQty = parseInt(btn.getAttribute('data-qty'));
+        if (currentQty <= 1) {
+          deleteCartItem(itemId);
+        } else {
+          updateCartItemQty(itemId, currentQty - 1);
+        }
+      });
+    });
+
+    // Increase Quantity
+    cartItemsContainer.querySelectorAll('.increase-qty-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemId = btn.getAttribute('data-id');
+        const currentQty = parseInt(btn.getAttribute('data-qty'));
+        updateCartItemQty(itemId, currentQty + 1);
+      });
+    });
+
+    // Remove Item
+    cartItemsContainer.querySelectorAll('.cart-item-remove-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const itemId = btn.getAttribute('data-id');
+        deleteCartItem(itemId);
+      });
+    });
+  };
+
+  const updateCartItemQty = (itemId, newQty) => {
+    fetch(`${API_URL}/cart/${itemId}`, {
+      method: 'PUT',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({ quantity: newQty })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        fetchCart();
+      } else {
+        alert(data.message || "Could not update quantity.");
+      }
+    })
+    .catch(err => console.error("Error updating qty:", err));
+  };
+
+  const deleteCartItem = (itemId) => {
+    fetch(`${API_URL}/cart/${itemId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        fetchCart();
+      }
+    })
+    .catch(err => console.error("Error deleting item:", err));
+  };
+
+  const clearCart = () => {
+    fetch(`${API_URL}/cart`, {
+      method: 'DELETE',
+      headers: getAuthHeaders()
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        fetchCart();
+      }
+    })
+    .catch(err => console.error("Error clearing cart:", err));
+  };
+
+  // Add Item to Cart API Call
+  window.addItemToCart = (productId, customJuiceId, quantity = 1) => {
+    if (!isUserLoggedIn()) {
+      document.getElementById('nav-signin-btn')?.click();
+      document.getElementById('mobile-signin-btn')?.click();
+      alert("Please sign in to add items to your cart 🛒");
+      return;
+    }
+
+    fetch(`${API_URL}/cart`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        product_id: productId,
+        custom_juice_id: customJuiceId,
+        quantity
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alert("Product added to cart!");
+        fetchCart();
+        showCartDrawer();
+      } else {
+        alert(data.message || "Failed to add to cart.");
+      }
+    })
+    .catch(err => console.error("Error adding to cart:", err));
+  };
+
+  // Listeners
+  cartToggleBtn?.addEventListener('click', showCartDrawer);
+  cartCloseBtn?.addEventListener('click', hideCartDrawer);
+  cartDrawer?.addEventListener('click', (e) => {
+    if (e.target === cartDrawer) hideCartDrawer();
+  });
+
+  cartClearBtn?.addEventListener('click', clearCart);
+
+  // Cart Checkout flow
+  cartCheckoutBtn?.addEventListener('click', () => {
+    if (!cart.items || cart.items.length === 0) return;
+    
+    // Close Drawer
+    hideCartDrawer();
+
+    // Scroll to preorder form
+    const preorderSection = document.getElementById('preorder');
+    if (preorderSection) {
+      preorderSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Auto-fill form from first item
+    const firstItem = cart.items[0];
+    const SKU_TO_FLAVOR = {
+      'NS-MANGO': 'mango',
+      'NS-ORANGE': 'orange',
+      'NS-MIXED': 'mixed',
+      'NS-POM': 'pomegranate',
+      'NS-WATER': 'watermelon',
+      'NS-MATCHA': 'matcha',
+      'NS-CUSTOM': 'custom'
+    };
+    const mappedFlavor = SKU_TO_FLAVOR[firstItem.sku] || 'mango';
+    
+    const flavorSelect = document.getElementById('flavor-preference');
+    if (flavorSelect) {
+      flavorSelect.value = mappedFlavor;
+    }
+
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    if (currentUser) {
+      const nameInput = document.getElementById('user-name');
+      const emailInput = document.getElementById('user-email');
+      if (nameInput) nameInput.value = currentUser.name;
+      if (emailInput) emailInput.value = currentUser.email;
+    }
+    
+    alert(`We stashed your checkout details for ${firstItem.name || 'your cart items'}. Please finalize your details below to complete your mock/Stripe preorder!`);
+  });
+
+  // Fetch cart initially on load to sync navbar badge count
+  if (isUserLoggedIn()) {
+    fetchCart();
+  }
+
+  // Intercept authentication flow to refetch cart when user signs in or out
+  window.onAuthChange = () => {
+    if (isUserLoggedIn()) {
+      fetchCart();
+    } else {
+      cart = { items: [], subtotal: 0, total_items: 0 };
+      updateCartBadgeUI();
+      hideCartDrawer();
+    }
+  };
 });

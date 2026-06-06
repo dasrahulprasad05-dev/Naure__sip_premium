@@ -2,7 +2,9 @@
    NatureSip Frontend Authentication Module
    ========================================================================== */
 
-const API_URL = 'https://naure-sip-premium.onrender.com/api';
+const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:5000/api'
+  : 'https://naure-sip-premium.onrender.com/api';
 
 // Prepopulate test user if database does not exist
 const initDatabase = () => {
@@ -181,6 +183,7 @@ const updateNavbarUI = () => {
 
   // Hook elements
   bindDynamicNavbarEvents();
+  window.onAuthChange?.();
 };
 
 // Bind dynamic event listeners to navbar components

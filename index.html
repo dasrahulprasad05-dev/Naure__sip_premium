@@ -59,6 +59,13 @@
       </nav>
       <!-- Sign In / User Profile Container -->
       <div id="desktop-auth-container" class="auth-container"></div>
+      <!-- Cart Trigger Button -->
+      <div class="cart-trigger-wrapper">
+        <button id="cart-toggle-btn" class="cart-toggle-btn" aria-label="Open shopping cart">
+          <span class="cart-icon">🛒</span>
+          <span id="cart-count-badge" class="cart-count-badge hide">0</span>
+        </button>
+      </div>
       <div class="theme-toggle-wrapper">
         <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
           <span class="theme-icon-light">☀️</span>
@@ -746,6 +753,33 @@
           <div class="modal-cta-row">
             <button class="btn btn-primary" id="modal-buy-btn">Secure Pre-Order</button>
           </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shopping Cart Side Drawer -->
+  <div id="cart-drawer" class="cart-drawer-overlay hide">
+    <div class="cart-drawer glass-card">
+      <div class="cart-drawer-header">
+        <h3>Shopping Cart (<span id="cart-drawer-count">0</span>)</h3>
+        <button id="cart-drawer-close-btn" class="modal-close-btn" aria-label="Close cart">&times;</button>
+      </div>
+      
+      <div class="cart-drawer-body">
+        <div id="cart-items-container" class="cart-items-container">
+          <!-- Dynamically populated cart items -->
+        </div>
+      </div>
+      
+      <div id="cart-drawer-footer" class="cart-drawer-footer hide">
+        <div class="cart-summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span id="cart-drawer-subtotal" class="summary-value">$0.00</span>
+        </div>
+        <div class="cart-action-buttons">
+          <button id="cart-clear-btn" class="btn btn-secondary btn-block">Clear Cart</button>
+          <button id="cart-checkout-btn" class="btn btn-primary btn-block">Proceed to Checkout</button>
         </div>
       </div>
     </div>
