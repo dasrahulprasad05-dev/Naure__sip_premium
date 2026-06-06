@@ -17,3 +17,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw?
+
+# Backend Specifics
+backend/.env
+backend/logs/
+backend/scratch/
+
