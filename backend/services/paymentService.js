@@ -73,6 +73,66 @@ export const createCheckoutSession = async (orderDetails, successUrl, cancelUrl)
 };
 
 /**
+ * @desc    Create a Stripe Checkout Session for a multi-item cart order
+ */
+export const createCartCheckoutSession = async (order, lineItems, successUrl, cancelUrl) => {
+  const { name, email, total_amount, id: orderId } = order;
+
+  if (isMockPayment) {
+    const mockSessionId = `cs_mock_${Date.now()}`;
+    console.log(`[Stripe Mock] Created cart checkout session ${mockSessionId} for ${email}`);
+    return {
+      id: mockSessionId,
+      url: `${successUrl}?session_id=${mockSessionId}&mock=true&email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}&amount=${total_amount}&order_id=${orderId}`,
+      isMock: true
+    };
+  }
+
+  try {
+    const stripeLineItems = lineItems.map(item => ({
+      price_data: {
+        currency: 'usd',
+        product_data: {
+          name: item.name,
+          metadata: { sku: item.sku }
+        },
+        unit_amount: Math.round(item.price * 100),
+      },
+      quantity: item.quantity,
+    }));
+
+    // Add tax if configured
+    if (parseFloat(order.tax) > 0) {
+      stripeLineItems.push({
+        price_data: {
+          currency: 'usd',
+          product_data: {
+            name: 'Estimated Sales Tax'
+          },
+          unit_amount: Math.round(parseFloat(order.tax) * 100),
+        },
+        quantity: 1,
+      });
+    }
+
+    const session = await stripe.checkout.sessions.create({
+      payment_method_types: ['card'],
+      line_items: stripeLineItems,
+      mode: 'payment',
+      customer_email: email,
+      success_url: `${successUrl}?session_id={CHECKOUT_SESSION_ID}&order_id=${orderId}`,
+      cancel_url: cancelUrl,
+      metadata: { orderId }
+    });
+
+    return { id: session.id, url: session.url, isMock: false };
+  } catch (err) {
+    console.error("❌ Stripe Cart Checkout Session creation failed:", err.message);
+    throw err;
+  }
+};
+
+/**
  * @desc    Process refund on payment transaction
  * @param   {string} paymentIntentId Stripe Payment Intent ID
  * @param   {number} amount Refund amount in USD

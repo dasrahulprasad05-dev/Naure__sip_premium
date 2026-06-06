@@ -58,8 +58,12 @@ const memoryDB = {
   ],
   inventory_transactions: [],
   payments: [],
-  audit_logs: []
+  audit_logs: [],
+  addresses: [],
+  reviews: [],
+  order_items: []
 };
+
 
 let pool = null;
 
@@ -252,6 +256,109 @@ export const query = async (text, params = []) => {
     return { rows: populatedOrders };
   }
 
+  // 5a. SELECT User's custom juices
+  if (queryStr.includes('select') && queryStr.includes('custom_juices') && queryStr.includes('user_id =')) {
+    const userId = params[0];
+    const juices = memoryDB.custom_juices.filter(j => j.user_id === userId);
+    return { rows: juices };
+  }
+
+  // 5b. SELECT User's saved addresses
+  if (queryStr.includes('select') && queryStr.includes('addresses') && queryStr.includes('user_id =')) {
+    const userId = params[0];
+    const addresses = memoryDB.addresses.filter(a => a.user_id === userId);
+    return { rows: addresses };
+  }
+
+  // 5c. INSERT saved address
+  if (queryStr.includes('insert into addresses')) {
+    const [user_id, street, city, state, postal_code, country, address_type, is_default] = params;
+    const newAddress = {
+      id: generateUUID(),
+      user_id,
+      street,
+      city,
+      state,
+      postal_code,
+      country,
+      address_type,
+      is_default: is_default === true,
+      created_at: new Date()
+    };
+    memoryDB.addresses.push(newAddress);
+    return { rows: [newAddress] };
+  }
+
+  // 5d. UPDATE saved address
+  if (queryStr.includes('update addresses')) {
+    const [street, city, state, postal_code, country, address_type, is_default, id, user_id] = params;
+    const idx = memoryDB.addresses.findIndex(a => a.id === id && a.user_id === user_id);
+    if (idx !== -1) {
+      memoryDB.addresses[idx] = {
+        ...memoryDB.addresses[idx],
+        street,
+        city,
+        state,
+        postal_code,
+        country,
+        address_type,
+        is_default: is_default === true
+      };
+      return { rows: [memoryDB.addresses[idx]] };
+    }
+    return { rows: [] };
+  }
+
+  // 5e. DELETE saved address
+  if (queryStr.includes('delete from addresses')) {
+    const [id, user_id] = params;
+    const idx = memoryDB.addresses.findIndex(a => a.id === id && a.user_id === user_id);
+    if (idx !== -1) {
+      memoryDB.addresses.splice(idx, 1);
+      return { rows: [] };
+    }
+    return { rows: [] };
+  }
+
+  // 5f. SELECT product reviews
+  if (queryStr.includes('select') && queryStr.includes('reviews') && queryStr.includes('product_id =')) {
+    const productId = params[0];
+    const reviews = memoryDB.reviews.filter(r => r.product_id === productId);
+    const populated = reviews.map(r => {
+      const user = memoryDB.users.find(u => u.id === r.user_id);
+      return {
+        ...r,
+        reviewer_name: user ? user.name : 'Anonymous User'
+      };
+    });
+    return { rows: populated };
+  }
+
+  // 5g. INSERT product review
+  if (queryStr.includes('insert into reviews')) {
+    const [user_id, product_id, rating, comment] = params;
+    // Handle ON CONFLICT by updating existing if matching user_id and product_id
+    const existingIdx = memoryDB.reviews.findIndex(r => r.user_id === user_id && r.product_id === product_id);
+    if (existingIdx !== -1) {
+      memoryDB.reviews[existingIdx].rating = rating;
+      memoryDB.reviews[existingIdx].comment = comment || null;
+      memoryDB.reviews[existingIdx].created_at = new Date();
+      return { rows: [memoryDB.reviews[existingIdx]] };
+    } else {
+      const newReview = {
+        id: generateUUID(),
+        user_id,
+        product_id,
+        rating,
+        comment: comment || null,
+        created_at: new Date()
+      };
+      memoryDB.reviews.push(newReview);
+      return { rows: [newReview] };
+    }
+  }
+
+
   // 6. INSERT Quiz results
   if (queryStr.includes('insert into quiz_results')) {
     const [user_id, primary_recommendation, quiz_answers] = params;
@@ -265,6 +372,14 @@ export const query = async (text, params = []) => {
     memoryDB.quiz_results.push(newResult);
     return { rows: [newResult] };
   }
+
+  // 6a. SELECT Quiz results history
+  if (queryStr.includes('select') && queryStr.includes('quiz_results') && queryStr.includes('user_id =')) {
+    const userId = params[0];
+    const results = memoryDB.quiz_results.filter(qr => qr.user_id === userId);
+    return { rows: results };
+  }
+
 
   // 7. SELECT Products (Full list, by SKU, or by ID)
   if (queryStr.includes('select') && queryStr.includes('products')) {

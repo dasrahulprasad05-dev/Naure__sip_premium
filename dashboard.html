@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NatureSip Dashboard | My Premium Portal</title>
+  <meta name="description" content="View your NatureSip custom blends library, track preorder statuses, manage saved addresses, and view your wellness recommendations.">
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body class="dashboard-body">
+
+  <!-- Preloader Screen -->
+  <div id="preloader" class="preloader-overlay">
+    <div class="preloader-content">
+      <div class="loader-circle-wrapper">
+        <div class="loader-circle"></div>
+        <div class="loader-fruit-icon">👤</div>
+      </div>
+      <h2 class="loader-title">NatureSip Portal</h2>
+      <p class="loader-subtitle">Retrieving profile ledger...</p>
+      <div class="progress-bar-container">
+        <div id="progress-bar" class="progress-bar"></div>
+      </div>
+      <span id="progress-text" class="progress-text">0%</span>
+    </div>
+  </div>
+
+  <!-- Header / Navigation -->
+  <header id="main-header" class="glass-header scrolled">
+    <div class="header-container">
+      <div class="logo-wrapper" onclick="window.location.href='index.html'">
+        <span class="logo-emoji">🌿</span>
+        <span class="logo-text">NatureSip</span>
+      </div>
+      <nav id="desktop-nav" class="nav-links">
+        <a href="index.html#hero" class="nav-link">Home</a>
+        <a href="index.html#flavors" class="nav-link">Flavors</a>
+        <a href="index.html#benefits" class="nav-link">Benefits</a>
+        <a href="quiz.html" class="nav-link">Flavor Quiz</a>
+        <div class="nav-dropdown">
+          <a href="#" class="nav-link dropdown-trigger" onclick="return false;">Experiences ▾</a>
+          <div class="dropdown-menu glass-card">
+            <a href="pairing.html" class="dropdown-item">Pairing Guide</a>
+            <a href="map.html" class="dropdown-item">Sourcing Map</a>
+            <a href="builder.html" class="dropdown-item">Craft Your Sip</a>
+          </div>
+        </div>
+      </nav>
+      <!-- Sign In / User Profile Container -->
+      <div id="desktop-auth-container" class="auth-container"></div>
+      
+      <!-- Cart Trigger Button -->
+      <div class="cart-trigger-wrapper">
+        <button id="cart-toggle-btn" class="cart-toggle-btn" aria-label="Open shopping cart">
+          <span class="cart-icon">🛒</span>
+          <span id="cart-count-badge" class="cart-count-badge hide">0</span>
+        </button>
+      </div>
+
+      <div class="theme-toggle-wrapper">
+        <button id="theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <div class="cta-wrapper">
+        <a href="index.html#preorder" id="nav-cta-btn" class="btn btn-primary">Pre-Order Now</a>
+      </div>
+      <button id="mobile-menu-btn" class="mobile-toggle" aria-label="Toggle menu">
+        <span class="bar"></span>
+        <span class="bar"></span>
+        <span class="bar"></span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile Drawer Menu -->
+  <div id="mobile-menu" class="mobile-drawer">
+    <nav class="mobile-nav-links">
+      <a href="index.html#hero" class="mobile-nav-link">Home</a>
+      <a href="index.html#flavors" class="mobile-nav-link">Flavors</a>
+      <a href="index.html#benefits" class="mobile-nav-link">Benefits</a>
+      <a href="quiz.html" class="mobile-nav-link">Flavor Quiz</a>
+      <a href="pairing.html" class="mobile-nav-link">Pairing Guide</a>
+      <a href="map.html" class="mobile-nav-link">Sourcing Map</a>
+      <a href="builder.html" class="mobile-nav-link">Craft Your Sip</a>
+      <!-- Mobile Sign In / User Profile Container -->
+      <div id="mobile-auth-container" class="mobile-auth-container"></div>
+      <div class="mobile-theme-toggle-row">
+        <span>Dark Mode</span>
+        <button id="mobile-theme-toggle-btn" class="theme-toggle-btn" aria-label="Toggle dark mode">
+          <span class="theme-icon-light">☀️</span>
+          <span class="theme-icon-dark">🌙</span>
+        </button>
+      </div>
+      <a href="index.html#preorder" class="mobile-nav-link btn-mobile-cta">Pre-Order Now</a>
+    </nav>
+  </div>
+
+  <!-- Dashboard Main Container -->
+  <main class="dashboard-main">
+    <div class="dashboard-bg-glows">
+      <div class="db-glow db-glow-1"></div>
+      <div class="db-glow db-glow-2"></div>
+    </div>
+    
+    <div class="container dashboard-container-wrapper">
+      <div class="dashboard-grid-layout">
+        
+        <!-- SIDEBAR NAVIGATION PANEL -->
+        <aside class="dashboard-sidebar glass-card">
+          <div class="profile-card-header">
+            <span class="profile-avatar-large">👤</span>
+            <h2 id="profile-name">Loading Profile...</h2>
+            <p id="profile-email">email@address.com</p>
+          </div>
+          <nav class="dashboard-tab-nav">
+            <button class="db-tab-btn active" data-tab="orders">📦 My Orders</button>
+            <button class="db-tab-btn" data-tab="addresses">🏠 Address Book</button>
+            <button class="db-tab-btn" data-tab="blends">🧪 Saved Blends</button>
+            <button class="db-tab-btn" data-tab="wellness">🥗 Wellness Profile</button>
+          </nav>
+        </aside>
+
+        <!-- MAIN DYNAMIC CONTENT CARD -->
+        <section class="dashboard-content-area glass-card">
+          
+          <!-- TAB: ORDERS HISTORY -->
+          <div id="tab-orders" class="db-tab-panel">
+            <h3 class="panel-title">My Orders History</h3>
+            <div id="orders-list" class="orders-list-wrapper">
+              <!-- Dynamically populated -->
+              <div class="loading-state">
+                <span class="loading-spinner">⏳</span>
+                <p>Retrieving pre-order logs...</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: ADDRESS BOOK -->
+          <div id="tab-addresses" class="db-tab-panel hide">
+            <div class="panel-header-row">
+              <h3 class="panel-title">Address Book</h3>
+              <button id="add-address-btn" class="btn btn-primary btn-sm">+ Add Address</button>
+            </div>
+            <div id="addresses-list" class="addresses-grid">
+              <!-- Dynamically populated -->
+            </div>
+            
+            <!-- Address Form Modal -->
+            <div id="address-form-modal" class="address-form-overlay hide">
+              <div class="address-form-card glass-card">
+                <h4 id="address-modal-title">Add New Address</h4>
+                <form id="address-inner-form" novalidate>
+                  <div class="form-group">
+                    <label for="addr-street">Street Address</label>
+                    <input type="text" id="addr-street" placeholder="123 Main St" required>
+                  </div>
+                  <div class="form-group-row-3">
+                    <div class="form-group">
+                      <label for="addr-city">City</label>
+                      <input type="text" id="addr-city" placeholder="City" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="addr-state">State</label>
+                      <input type="text" id="addr-state" placeholder="State" required>
+                    </div>
+                    <div class="form-group">
+                      <label for="addr-zip">Zip Code</label>
+                      <input type="text" id="addr-zip" placeholder="Zip" required>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="addr-country">Country</label>
+                    <input type="text" id="addr-country" placeholder="United States" required>
+                  </div>
+                  <div class="form-group-row">
+                    <div class="form-group">
+                      <label for="addr-type">Address Type</label>
+                      <select id="addr-type">
+                        <option value="shipping">Shipping Address</option>
+                        <option value="billing">Billing Address</option>
+                      </select>
+                    </div>
+                    <div class="form-group checkbox-group">
+                      <label for="addr-default">
+                        <input type="checkbox" id="addr-default"> Set as default address
+                      </label>
+                    </div>
+                  </div>
+                  <div class="modal-actions-row">
+                    <button type="button" id="cancel-address-btn" class="btn btn-secondary btn-sm">Cancel</button>
+                    <button type="submit" class="btn btn-primary btn-sm">Save Address</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+          <!-- TAB: SAVED BLENDS -->
+          <div id="tab-blends" class="db-tab-panel hide">
+            <h3 class="panel-title">My Saved Recipes</h3>
+            <div id="blends-list" class="blends-grid">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+          <!-- TAB: WELLNESS PROFILE -->
+          <div id="tab-wellness" class="db-tab-panel hide">
+            <h3 class="panel-title">My Wellness Profile</h3>
+            <div id="wellness-profile-content" class="wellness-profile-layout">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Shopping Cart Side Drawer -->
+  <div id="cart-drawer" class="cart-drawer-overlay hide">
+    <div class="cart-drawer glass-card">
+      <div class="cart-drawer-header">
+        <h3>Shopping Cart (<span id="cart-drawer-count">0</span>)</h3>
+        <button id="cart-drawer-close-btn" class="modal-close-btn" aria-label="Close cart">&times;</button>
+      </div>
+      
+      <div class="cart-drawer-body">
+        <div id="cart-items-container" class="cart-items-container">
+          <!-- Dynamically populated cart items -->
+        </div>
+      </div>
+      
+      <div id="cart-drawer-footer" class="cart-drawer-footer hide">
+        <div class="cart-summary-row">
+          <span class="summary-label">Subtotal</span>
+          <span id="cart-drawer-subtotal" class="summary-value">$0.00</span>
+        </div>
+        <div class="cart-action-buttons">
+          <button id="cart-clear-btn" class="btn btn-secondary btn-block">Clear Cart</button>
+          <button id="cart-checkout-btn" class="btn btn-primary btn-block">Proceed to Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login / Sign In Modal Container -->
+  <div id="login-modal" class="login-modal-overlay hide"></div>
+
+  <script type="module" src="./dashboard.js"></script>
+</body>
+</html>

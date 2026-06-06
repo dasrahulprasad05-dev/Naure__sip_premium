@@ -12,6 +12,8 @@ import quizRoutes from './routes/quiz.js';
 import paymentRoutes from './routes/payments.js';
 import productRoutes from './routes/products.js';
 import cartRoutes from './routes/cart.js';
+import addressRoutes from './routes/address.js';
+import reviewRoutes from './routes/reviews.js';
 import { isMockEnabled } from './config/db.js';
 
 dotenv.config();
@@ -39,6 +41,8 @@ app.use('/api/quiz', quizRoutes);
 app.use('/api/payments', paymentRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/cart', cartRoutes);
+app.use('/api/addresses', addressRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // 3. System Health Probe Endpoint
 app.get('/health', (req, res) => {

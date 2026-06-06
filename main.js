@@ -730,10 +730,86 @@ document.addEventListener('DOMContentLoaded', () => {
       modalTasteMeters.appendChild(row);
     });
 
+    // 1. Setup Reviews visibility depending on authentication status
+    const token = localStorage.getItem('token');
+    const addReviewBox = document.getElementById('modal-add-review-box');
+    const reviewAuthPrompt = document.getElementById('modal-review-auth-prompt');
+
+    if (token) {
+      if (addReviewBox) addReviewBox.style.display = 'block';
+      if (reviewAuthPrompt) reviewAuthPrompt.classList.add('hide');
+    } else {
+      if (addReviewBox) addReviewBox.style.display = 'none';
+      if (reviewAuthPrompt) reviewAuthPrompt.classList.remove('hide');
+    }
+
+    // Bind sign in click inside prompt
+    const reviewLoginTrigger = document.getElementById('review-login-trigger');
+    if (reviewLoginTrigger) {
+      reviewLoginTrigger.onclick = (e) => {
+        e.preventDefault();
+        closeFlavorModal();
+        document.getElementById('nav-signin-btn')?.click();
+      };
+    }
+
+    // 2. Fetch and render reviews from backend
+    const productId = FLAVOR_TO_PRODUCT_ID[flavorKey];
+    const reviewsListContainer = document.getElementById('modal-reviews-list');
+
+    if (reviewsListContainer && productId) {
+      reviewsListContainer.innerHTML = '<div class="loading-state-mini">⏳ Fetching feedback...</div>';
+
+      fetch(`${API_URL}/reviews/product/${productId}`)
+        .then(res => res.json())
+        .then(resData => {
+          if (resData.status === 'success') {
+            // Update modal average rating badge
+            if (resData.average_rating !== undefined && resData.average_rating > 0) {
+              modalRating.innerText = `${parseFloat(resData.average_rating).toFixed(1)} ★`;
+            } else {
+              modalRating.innerText = 'N/A ★';
+            }
+
+            if (!resData.reviews || resData.reviews.length === 0) {
+              reviewsListContainer.innerHTML = '<p class="no-reviews-msg">No reviews yet. Be the first to rate this flavor!</p>';
+              return;
+            }
+
+            reviewsListContainer.innerHTML = resData.reviews.map(rev => {
+              const starsHtml = '★'.repeat(rev.rating) + '☆'.repeat(5 - rev.rating);
+              const dateStr = new Date(rev.created_at).toLocaleDateString('en-US', {
+                year: 'numeric', month: 'short', day: 'numeric'
+              });
+              const nameText = rev.reviewer_name || 'Verified Customer';
+              const commentText = rev.comment || '';
+
+              return `
+                <div class="modal-review-card">
+                  <div class="review-card-meta">
+                    <span class="reviewer-name">${nameText}</span>
+                    <span class="review-stars-render">${starsHtml}</span>
+                  </div>
+                  <span class="review-date-label">${dateStr}</span>
+                  <p class="review-content-body">${commentText}</p>
+                </div>
+              `;
+            }).join('');
+          } else {
+            reviewsListContainer.innerHTML = '<p class="error-reviews-msg">Could not load ratings ledger.</p>';
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          reviewsListContainer.innerHTML = '<p class="error-reviews-msg">Network error loading reviews.</p>';
+        });
+    }
+
     // Display modal
     modalOverlay.classList.remove('hide');
     document.body.style.overflow = 'hidden'; // prevent page scroll
   };
+
 
   const closeFlavorModal = () => {
     modalOverlay.classList.add('hide');
@@ -1093,52 +1169,118 @@ document.addEventListener('DOMContentLoaded', () => {
 
   cartClearBtn?.addEventListener('click', clearCart);
 
-  // Cart Checkout flow
+  // Cart Checkout flow (Direct integration with multi-item checkout API)
   cartCheckoutBtn?.addEventListener('click', () => {
     if (!cart.items || cart.items.length === 0) return;
     
-    // Close Drawer
-    hideCartDrawer();
-
-    // Scroll to preorder form
-    const preorderSection = document.getElementById('preorder');
-    if (preorderSection) {
-      preorderSection.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Auto-fill form from first item
-    const firstItem = cart.items[0];
-    const SKU_TO_FLAVOR = {
-      'NS-MANGO': 'mango',
-      'NS-ORANGE': 'orange',
-      'NS-MIXED': 'mixed',
-      'NS-POM': 'pomegranate',
-      'NS-WATER': 'watermelon',
-      'NS-MATCHA': 'matcha',
-      'NS-CUSTOM': 'custom'
-    };
-    const mappedFlavor = SKU_TO_FLAVOR[firstItem.sku] || 'mango';
-    
-    const flavorSelect = document.getElementById('flavor-preference');
-    if (flavorSelect) {
-      flavorSelect.value = mappedFlavor;
-    }
-
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    if (currentUser) {
-      const nameInput = document.getElementById('user-name');
-      const emailInput = document.getElementById('user-email');
-      if (nameInput) nameInput.value = currentUser.name;
-      if (emailInput) emailInput.value = currentUser.email;
+    if (!currentUser) {
+      document.getElementById('nav-signin-btn')?.click();
+      alert("Please sign in to proceed with checkout.");
+      return;
     }
-    
-    alert(`We stashed your checkout details for ${firstItem.name || 'your cart items'}. Please finalize your details below to complete your mock/Stripe preorder!`);
+
+    const oldBtnText = cartCheckoutBtn.innerText;
+    cartCheckoutBtn.disabled = true;
+    cartCheckoutBtn.innerText = "Processing checkout...";
+
+    fetch(`${API_URL}/orders/checkout`, {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify({
+        name: currentUser.name,
+        email: currentUser.email
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        if (data.checkout_url) {
+          hideCartDrawer();
+          window.location.href = data.checkout_url;
+        } else {
+          alert("Order created successfully! Redirect URL is missing in mock configuration.");
+          hideCartDrawer();
+        }
+      } else {
+        alert(data.message || "Failed to process cart checkout.");
+      }
+    })
+    .catch(err => {
+      console.error("Cart checkout error:", err);
+      alert("Failed to reach checkout service. Please check your network connection.");
+    })
+    .finally(() => {
+      cartCheckoutBtn.disabled = false;
+      cartCheckoutBtn.innerText = oldBtnText;
+    });
+  });
+
+  // Submit product review ratings and comments
+  const productReviewForm = document.getElementById('product-review-form');
+  productReviewForm?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const token = localStorage.getItem('token');
+    if (!token) {
+      alert("Please sign in to submit reviews.");
+      return;
+    }
+
+    const productId = FLAVOR_TO_PRODUCT_ID[activeFlavorKey];
+    if (!productId) return;
+
+    const ratingRadio = productReviewForm.querySelector('input[name="review-rating"]:checked');
+    const commentText = document.getElementById('review-comment').value.trim();
+
+    if (!ratingRadio) {
+      alert("Please select a rating score between 1 and 5 stars.");
+      return;
+    }
+
+    const ratingValue = ratingRadio.value;
+    const submitBtn = document.getElementById('submit-review-btn');
+    submitBtn.disabled = true;
+    submitBtn.innerText = "Submitting review...";
+
+    fetch(`${API_URL}/reviews`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      },
+      body: JSON.stringify({
+        product_id: productId,
+        rating: ratingValue,
+        comment: commentText
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.status === 'success') {
+        alert("Thank you! Your product review has been logged.");
+        productReviewForm.reset();
+        openFlavorModal(activeFlavorKey); // Refresh reviews list
+      } else {
+        alert(data.message || "Could not save your review.");
+      }
+    })
+    .catch(err => {
+      console.error("Submit review error:", err);
+      alert("Network error submitting review.");
+    })
+    .finally(() => {
+      submitBtn.disabled = false;
+      submitBtn.innerText = "Submit Review";
+    });
   });
 
   // Fetch cart initially on load to sync navbar badge count
   if (isUserLoggedIn()) {
     fetchCart();
   }
+
+  // Bind cart refresh state globally for dashboard actions
+  window.refreshCartState = fetchCart;
 
   // Intercept authentication flow to refetch cart when user signs in or out
   window.onAuthChange = () => {
@@ -1150,4 +1292,5 @@ document.addEventListener('DOMContentLoaded', () => {
       hideCartDrawer();
     }
   };
+
 });

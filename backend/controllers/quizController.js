@@ -43,3 +43,24 @@ export const saveQuizResult = async (req, res, next) => {
     next(err);
   }
 };
+
+/**
+ * @desc    Get user flavor quiz recommendations history
+ * @route   GET /api/quiz/results
+ * @access  Private (Authentication Required)
+ */
+export const getQuizResults = async (req, res, next) => {
+  try {
+    const sql = 'SELECT * FROM quiz_results WHERE user_id = $1 ORDER BY created_at DESC';
+    const result = await query(sql, [req.user.id]);
+
+    res.status(200).json({
+      status: 'success',
+      count: result.rows.length,
+      results: result.rows
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

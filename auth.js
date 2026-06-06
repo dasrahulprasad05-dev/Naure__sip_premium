@@ -142,6 +142,9 @@ const updateNavbarUI = () => {
               <span class="user-email-text">${currentUser.email}</span>
             </div>
             <hr class="dropdown-divider">
+            <button onclick="window.location.href='dashboard.html'" class="dropdown-item">
+              <span class="item-icon">📊</span> My Dashboard
+            </button>
             <button id="logout-btn" class="dropdown-item">
               <span class="item-icon">🚪</span> Log Out
             </button>
@@ -161,10 +164,14 @@ const updateNavbarUI = () => {
               <span class="mobile-user-email">${currentUser.email}</span>
             </div>
           </div>
-          <button id="mobile-logout-btn" class="btn btn-secondary btn-sm mobile-logout-btn">Log Out</button>
+          <div class="mobile-profile-actions" style="display: flex; gap: 8px; width: 100%; margin-top: 10px;">
+            <button onclick="window.location.href='dashboard.html'" class="btn btn-primary btn-sm" style="flex: 1;">Dashboard</button>
+            <button id="mobile-logout-btn" class="btn btn-secondary btn-sm mobile-logout-btn" style="flex: 1;">Log Out</button>
+          </div>
         </div>
       `;
     }
+
   } else {
     // Desktop: Logged out State
     if (desktopContainer) {

@@ -1,15 +1,16 @@
 /* ==========================================================================
-   NatureSip Custom Juice Recipes API Routes Mapping
+   NatureSip Product Reviews API Routes Mapping
    ========================================================================== */
 import express from 'express';
-import { saveCustomJuice, getUserCustomJuices } from '../controllers/juiceController.js';
+import { getProductReviews, createReview } from '../controllers/reviewController.js';
 import { protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Routes (Protected: Sign In Required)
-router.post('/', protect, saveCustomJuice);
-router.get('/', protect, getUserCustomJuices);
+// Public: view product ratings
+router.get('/product/:productId', getProductReviews);
 
+// Protected: submit reviews
+router.post('/', protect, createReview);
 
 export default router;

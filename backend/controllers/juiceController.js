@@ -41,3 +41,24 @@ export const saveCustomJuice = async (req, res, next) => {
     next(err);
   }
 };
+
+/**
+ * @desc    Get custom juice recipes saved by the user
+ * @route   GET /api/custom-juices
+ * @access  Private (Authentication Required)
+ */
+export const getUserCustomJuices = async (req, res, next) => {
+  try {
+    const sql = 'SELECT * FROM custom_juices WHERE user_id = $1 ORDER BY created_at DESC';
+    const result = await query(sql, [req.user.id]);
+
+    res.status(200).json({
+      status: 'success',
+      count: result.rows.length,
+      juices: result.rows
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+

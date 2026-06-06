@@ -13,8 +13,10 @@ export default defineConfig({
         quiz: resolve(__dirname, 'quiz.html'),
         pairing: resolve(__dirname, 'pairing.html'),
         map: resolve(__dirname, 'map.html'),
-        builder: resolve(__dirname, 'builder.html')
+        builder: resolve(__dirname, 'builder.html'),
+        dashboard: resolve(__dirname, 'dashboard.html')
       }
     }
   }
 });
+

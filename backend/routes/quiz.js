@@ -2,12 +2,14 @@
    NatureSip Wellness Quiz Results API Routes Mapping
    ========================================================================== */
 import express from 'express';
-import { saveQuizResult } from '../controllers/quizController.js';
-import { optionalProtect } from '../middleware/auth.js';
+import { saveQuizResult, getQuizResults } from '../controllers/quizController.js';
+import { optionalProtect, protect } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Routes (Optional Authentication)
+// Routes
 router.post('/results', optionalProtect, saveQuizResult);
+router.get('/results', protect, getQuizResults);
+
 
 export default router;
