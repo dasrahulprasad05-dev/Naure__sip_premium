@@ -6,6 +6,13 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import dns from 'dns';
+
+// Force DNS resolution to prefer IPv4 to avoid ENETUNREACH on environments (like Render)
+// that lack IPv6 outbound routing while connecting to Supabase.
+if (typeof dns.setDefaultResultOrder === 'function') {
+  dns.setDefaultResultOrder('ipv4first');
+}
 
 dotenv.config();
 

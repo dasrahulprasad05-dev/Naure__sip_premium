@@ -3,6 +3,8 @@
    ========================================================================== */
 import { initAuth } from './auth.js';
 
+const API_URL = 'https://naure-sip-premium.onrender.com/api';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Authentication State
   initAuth();
@@ -330,12 +332,51 @@ document.addEventListener('DOMContentLoaded', () => {
       capColor: activeCapColor
     };
 
-    // Store custom blend profile in localStorage
+    // Stash formula detail locally
     localStorage.setItem('custom-blend', JSON.stringify(customFormula));
     localStorage.setItem('preorder-flavor', 'custom');
 
-    // Route to home preorder section
-    window.location.href = 'index.html#preorder';
+    const token = localStorage.getItem('token');
+    if (token) {
+      // Authenticated user: save custom recipe to database
+      checkoutBtn.disabled = true;
+      const originalText = checkoutBtn.innerText;
+      checkoutBtn.innerText = "Saving Blend...";
+
+      fetch(`${API_URL}/custom-juices`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          blend_name: blendName,
+          ingredients: activeBlend.reduce((acc, k) => {
+            acc[k] = (acc[k] || 0) + 20; // 20% per ingredient drop
+            return acc;
+          }, {}),
+          color_rgb: liquidFill.style.background || "rgb(15, 23, 42)"
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          localStorage.setItem('custom-juice-id', data.custom_juice_id);
+          window.location.href = 'index.html#preorder';
+        } else {
+          alert("Could not save your custom blend to your database profile, but you can still preorder.");
+          window.location.href = 'index.html#preorder';
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        // Fallback gracefully to local guest preorder flow
+        window.location.href = 'index.html#preorder';
+      });
+    } else {
+      // Guest flow
+      window.location.href = 'index.html#preorder';
+    }
   });
 
   // 12. Dark Mode Switch logic

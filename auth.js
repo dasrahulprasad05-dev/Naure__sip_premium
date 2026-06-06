@@ -2,6 +2,8 @@
    NatureSip Frontend Authentication Module
    ========================================================================== */
 
+const API_URL = 'https://naure-sip-premium.onrender.com/api';
+
 // Prepopulate test user if database does not exist
 const initDatabase = () => {
   if (!localStorage.getItem('registeredUsers')) {
@@ -224,6 +226,7 @@ const bindDynamicNavbarEvents = () => {
   // Click Logout
   const performLogout = () => {
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('token');
     updateNavbarUI();
     showToast("You have been logged out.");
   };
@@ -317,9 +320,7 @@ const setupModalControllers = () => {
       passwordInput.classList.remove('invalid');
     }
 
-    if (!isValid) return;
-
-    // Simulate API call state
+    // Submit to login API endpoint
     const submitBtn = document.getElementById('signin-submit-btn');
     const loader = document.getElementById('signin-loader');
     const btnText = submitBtn.querySelector('.btn-text');
@@ -328,33 +329,37 @@ const setupModalControllers = () => {
     loader.classList.remove('hide');
     btnText.innerText = "Signing in...";
 
-    setTimeout(() => {
-      // Check validation locally
-      const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-      const matchedUser = users.find(u => u.email.toLowerCase() === emailVal.toLowerCase());
-
-      if (matchedUser && matchedUser.password === passwordVal) {
-        // Sign in successful
-        localStorage.setItem('currentUser', JSON.stringify({
-          name: matchedUser.name,
-          email: matchedUser.email
-        }));
-        
+    fetch(`${API_URL}/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: emailVal,
+        password: passwordVal
+      })
+    })
+    .then(res => res.json().then(data => ({ status: res.status, data })))
+    .then(({ status, data }) => {
+      if (status === 200 && data.status === 'success') {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
         closeModal();
         updateNavbarUI();
-        showToast(`Welcome back, ${matchedUser.name}! 🌿`);
+        showToast(`Welcome back, ${data.user.name}! 🌿`);
       } else {
-        // Invalid details
         emailInput.classList.add('invalid');
         passwordInput.classList.add('invalid');
-        showToast("Invalid email address or password.");
+        showToast(data.message || "Invalid email address or password.");
       }
-
-      // Reset submit button state
+    })
+    .catch(err => {
+      console.error(err);
+      showToast("Network error. Failed to connect to server.");
+    })
+    .finally(() => {
       submitBtn.disabled = false;
       loader.classList.add('hide');
       btnText.innerText = "Sign In";
-    }, 1200);
+    });
   });
 
   // Sign Up submit handler
@@ -404,9 +409,7 @@ const setupModalControllers = () => {
       confirmPasswordInput.classList.remove('invalid');
     }
 
-    if (!isValid) return;
-
-    // Simulate API registration
+    // Submit to registration API endpoint
     const submitBtn = document.getElementById('signup-submit-btn');
     const loader = document.getElementById('signup-loader');
     const btnText = submitBtn.querySelector('.btn-text');
@@ -415,39 +418,37 @@ const setupModalControllers = () => {
     loader.classList.remove('hide');
     btnText.innerText = "Creating account...";
 
-    setTimeout(() => {
-      const users = JSON.parse(localStorage.getItem('registeredUsers')) || [];
-      const alreadyExists = users.some(u => u.email.toLowerCase() === emailVal.toLowerCase());
-
-      if (alreadyExists) {
-        emailInput.classList.add('invalid');
-        showToast("An account with this email address already exists.");
-      } else {
-        // Register new user
-        const newUser = {
-          name: nameVal,
-          email: emailVal,
-          password: passwordVal
-        };
-        users.push(newUser);
-        localStorage.setItem('registeredUsers', JSON.stringify(users));
-
-        // Auto log in
-        localStorage.setItem('currentUser', JSON.stringify({
-          name: newUser.name,
-          email: newUser.email
-        }));
-
+    fetch(`${API_URL}/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        name: nameVal,
+        email: emailVal,
+        password: passwordVal
+      })
+    })
+    .then(res => res.json().then(data => ({ status: res.status, data })))
+    .then(({ status, data }) => {
+      if (status === 201 && data.status === 'success') {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('currentUser', JSON.stringify(data.user));
         closeModal();
         updateNavbarUI();
-        showToast(`Account registered successfully! Welcome ${newUser.name} ✨`);
+        showToast(`Account registered successfully! Welcome ${data.user.name} ✨`);
+      } else {
+        emailInput.classList.add('invalid');
+        showToast(data.message || "An account with this email address already exists.");
       }
-
-      // Reset state
+    })
+    .catch(err => {
+      console.error(err);
+      showToast("Network error. Failed to connect to server.");
+    })
+    .finally(() => {
       submitBtn.disabled = false;
       loader.classList.add('hide');
       btnText.innerText = "Create Account";
-    }, 1200);
+    });
   });
 };
 

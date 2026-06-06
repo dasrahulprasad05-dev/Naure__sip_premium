@@ -3,7 +3,7 @@
    ========================================================================== */
 import { initAuth } from './auth.js';
 
-const API_URL = 'http://localhost:5000/api';
+const API_URL = 'https://naure-sip-premium.onrender.com/api';
 
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Authentication State

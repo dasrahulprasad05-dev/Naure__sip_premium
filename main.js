@@ -3,6 +3,8 @@
    ========================================================================== */
 import { initAuth } from './auth.js';
 
+const API_URL = 'https://naure-sip-premium.onrender.com/api';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Authentication State
   initAuth();
@@ -287,6 +289,98 @@ document.addEventListener('DOMContentLoaded', () => {
   const nameInput = document.getElementById('user-name');
   const emailInput = document.getElementById('user-email');
 
+  // URL Checkout Callback check
+  const urlParams = new URLSearchParams(window.location.search);
+  const sessionId = urlParams.get('session_id');
+  const orderId = urlParams.get('order_id');
+  const isMockPaymentRedirect = urlParams.get('mock') === 'true';
+
+  if (sessionId && orderId) {
+    if (preorderForm && formSuccess) {
+      preorderForm.style.display = 'none';
+      formSuccess.classList.remove('hide');
+      
+      const successTitle = formSuccess.querySelector('h3');
+      const successDesc = formSuccess.querySelector('p');
+      const successIcon = formSuccess.querySelector('.success-icon');
+      
+      successTitle.innerText = "Securing VIP Pre-order...";
+      successDesc.innerText = "Please wait while we verify your checkout transaction and reserve your cold-pressed batch.";
+      successIcon.innerText = "⏳";
+      
+      const emailParam = urlParams.get('email') || '';
+      const skuParam = urlParams.get('sku') || '';
+      const nameParam = urlParams.get('name') || '';
+      const amountParam = urlParams.get('amount') || '';
+
+      const finishConfirmation = (emailAddress) => {
+        successTitle.innerText = "VIP Pre-order Confirmed! 🎉";
+        successDesc.innerHTML = `Thank you! Your payment has been secured. We've reserved your premium cold-pressed package. Confirmation details sent to <strong>${emailAddress || emailParam || 'your email'}</strong>.`;
+        successIcon.innerText = "🎉";
+        
+        // Clean URL parameters without reloading
+        window.history.replaceState({}, document.title, window.location.pathname + window.location.hash);
+      };
+
+      if (isMockPaymentRedirect) {
+        // Simulated Mock payment confirmation
+        fetch(`${API_URL}/payments/confirm-mock`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            order_id: orderId,
+            session_id: sessionId,
+            sku: skuParam,
+            email: emailParam,
+            name: nameParam,
+            amount: amountParam
+          })
+        })
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            finishConfirmation(emailParam);
+          } else {
+            successTitle.innerText = "Verification Failed ❌";
+            successDesc.innerText = data.message || "We encountered an issue verifying your mock checkout transaction.";
+            successIcon.innerText = "❌";
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          successTitle.innerText = "Verification Error ❌";
+          successDesc.innerText = "Failed to communicate with payment servers.";
+          successIcon.innerText = "❌";
+        });
+      } else {
+        // Real Stripe checkout session verification
+        fetch(`${API_URL}/payments/verify-session?session_id=${sessionId}&order_id=${orderId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.status === 'success') {
+            finishConfirmation(data.order?.email);
+          } else {
+            successTitle.innerText = "Verification Failed ❌";
+            successDesc.innerText = data.message || "We encountered an issue verifying your checkout session.";
+            successIcon.innerText = "❌";
+          }
+        })
+        .catch(err => {
+          console.error(err);
+          successTitle.innerText = "Verification Error ❌";
+          successDesc.innerText = "Failed to connect to verification servers.";
+          successIcon.innerText = "❌";
+        });
+      }
+      
+      // Auto-scroll to the preorder form status area
+      setTimeout(() => {
+        const preorderSection = document.getElementById('preorder');
+        if (preorderSection) preorderSection.scrollIntoView({ behavior: 'smooth' });
+      }, 500);
+    }
+  }
+
   // Check for custom blend recipe details
   const customDataString = localStorage.getItem('custom-blend');
   if (customDataString) {
@@ -360,12 +454,59 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (isValid) {
-      preorderForm.classList.add('hide');
-      setTimeout(() => {
-        preorderForm.style.display = 'none';
-        successEmailText.innerText = emailVal;
-        formSuccess.classList.remove('hide');
-      }, 300);
+      const flavorVal = document.getElementById('flavor-preference').value;
+      const customJuiceId = localStorage.getItem('custom-juice-id');
+      const submitBtn = document.getElementById('submit-preorder-btn');
+      const oldBtnText = submitBtn.innerText;
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Processing...";
+
+      const token = localStorage.getItem('token');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) headers['Authorization'] = `Bearer ${token}`;
+
+      fetch(`${API_URL}/orders`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          name: nameVal,
+          email: emailVal,
+          flavor_preference: flavorVal,
+          custom_juice_id: flavorVal === 'custom' ? customJuiceId : null
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.status === 'success') {
+          // Clear custom-blend details from localStorage
+          localStorage.removeItem('custom-blend');
+          localStorage.removeItem('custom-juice-id');
+          
+          if (data.checkout_url) {
+            // Redirect to Stripe or Mock checkout page
+            window.location.href = data.checkout_url;
+          } else {
+            // Fallback: Show Success Panel directly
+            preorderForm.classList.add('hide');
+            setTimeout(() => {
+              preorderForm.style.display = 'none';
+              successEmailText.innerText = emailVal;
+              formSuccess.classList.remove('hide');
+            }, 300);
+          }
+        } else {
+          alert(data.message || "Something went wrong. Please check your fields.");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Failed to submit preorder. Check your network server connection.");
+      })
+      .finally(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerText = oldBtnText;
+      });
     }
   });
 
