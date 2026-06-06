@@ -3,6 +3,8 @@
    ========================================================================== */
 import { initAuth } from './auth.js';
 
+const API_URL = 'http://localhost:5000/api';
+
 document.addEventListener('DOMContentLoaded', () => {
   // Initialize Authentication State
   initAuth();
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calories: "52 Kcal",
       rating: "4.9 ★",
       glowBg: "#f59e0b",
-      image: "./public/images/mango_bottle.png",
+      image: "/images/mango_bottle.png",
       benefits: [
         "100% Organic Alphonso Mangoes",
         "High in Vitamins A & C for glowing skin",
@@ -89,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calories: "48 Kcal",
       rating: "4.8 ★",
       glowBg: "#ea580c",
-      image: "./public/images/orange_bottle.png",
+      image: "/images/orange_bottle.png",
       benefits: [
         "100% Nagpur Orange Squeezes",
         "Excellent source of Vitamin C (Daily Value)",
@@ -111,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calories: "45 Kcal",
       rating: "4.9 ★",
       glowBg: "linear-gradient(to bottom, #d97706, #db2777)",
-      image: "./public/images/mixed_fruit_bottle.png",
+      image: "/images/mixed_fruit_bottle.png",
       benefits: [
         "Medley of Mango, Orange, Apple, and Berries",
         "Packed with multi-vitamins and prebiotics",
@@ -133,7 +135,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calories: "58 Kcal",
       rating: "4.7 ★",
       glowBg: "#dc2626",
-      image: "./public/images/pomegranate_bottle.png",
+      image: "/images/pomegranate_bottle.png",
       benefits: [
         "Pure Cold-Pressed Pomegranate Seeds",
         "Rich in heart-healthy polyphenols",
@@ -155,7 +157,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calories: "38 Kcal",
       rating: "4.8 ★",
       glowBg: "#f43f5e",
-      image: "./public/images/watermelon_bottle.png",
+      image: "/images/watermelon_bottle.png",
       benefits: [
         "95% Organic Watermelon Nectar + Mint Slices",
         "Natural L-Citrulline for muscle recovery",
@@ -177,7 +179,7 @@ document.addEventListener('DOMContentLoaded', () => {
       calories: "42 Kcal",
       rating: "5.0 ★",
       glowBg: "linear-gradient(to bottom, #1d4ed8, #059669)",
-      image: "./public/images/blueberry_matcha_bottle.png",
+      image: "/images/blueberry_matcha_bottle.png",
       benefits: [
         "Ceremonial-grade Japanese Uji Matcha",
         "Packed with blueberry anthocyanins",
@@ -310,6 +312,28 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
     selectedFlavorResult = winner;
+    
+    // Save quiz results to backend API (optional authentication)
+    const token = localStorage.getItem('token');
+    const headers = { 'Content-Type': 'application/json' };
+    if (token) headers['Authorization'] = `Bearer ${token}`;
+
+    fetch(`${API_URL}/quiz/results`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify({
+        primary_recommendation: winner,
+        quiz_answers: scoreTracker
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      console.log('Quiz saved to backend profile:', data.saved);
+    })
+    .catch(err => {
+      console.error('Failed to log quiz results to backend API:', err.message);
+    });
+
     const data = flavorDetails[winner];
 
     // Populate Fields
