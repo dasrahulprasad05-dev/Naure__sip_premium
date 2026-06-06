@@ -75,8 +75,15 @@ export const createOrder = async (req, res, next) => {
 
     // 5. Create checkout session
     // Redirect URLs back to our client portal
-    const successUrl = process.env.CHECKOUT_SUCCESS_URL || 'http://localhost:3000/index.html';
-    const cancelUrl = process.env.CHECKOUT_CANCEL_URL || 'http://localhost:3000/index.html#preorder';
+    let clientOrigin = 'http://localhost:3000';
+    if (req.headers.referer) {
+      try {
+        clientOrigin = new URL(req.headers.referer).origin;
+      } catch (e) {}
+    }
+    const successUrl = process.env.CHECKOUT_SUCCESS_URL || `${clientOrigin}/index.html`;
+    const cancelUrl = process.env.CHECKOUT_CANCEL_URL || `${clientOrigin}/index.html#preorder`;
+
 
     const orderDetails = {
       name,
@@ -247,8 +254,15 @@ export const checkoutCart = async (req, res, next) => {
     await query('DELETE FROM cart_items WHERE cart_id = $1', [cart.id]);
 
     // 8. Create Stripe Checkout Session
-    const successUrl = process.env.CHECKOUT_SUCCESS_URL || 'http://localhost:3000/index.html';
-    const cancelUrl = process.env.CHECKOUT_CANCEL_URL || 'http://localhost:3000/index.html';
+    let clientOrigin = 'http://localhost:3000';
+    if (req.headers.referer) {
+      try {
+        clientOrigin = new URL(req.headers.referer).origin;
+      } catch (e) {}
+    }
+    const successUrl = process.env.CHECKOUT_SUCCESS_URL || `${clientOrigin}/index.html`;
+    const cancelUrl = process.env.CHECKOUT_CANCEL_URL || `${clientOrigin}/index.html`;
+
 
     const session = await createCartCheckoutSession(newOrder, lineItems, successUrl, cancelUrl);
 

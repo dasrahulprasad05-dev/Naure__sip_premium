@@ -1,7 +1,8 @@
 /* ==========================================================================
    NatureSip Premium JavaScript Controller
    ========================================================================== */
-import { initAuth } from './auth.js';
+import { initAuth, showToast } from './auth.js';
+
 
 const API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
   ? 'http://localhost:5000/api'
@@ -1134,7 +1135,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!isUserLoggedIn()) {
       document.getElementById('nav-signin-btn')?.click();
       document.getElementById('mobile-signin-btn')?.click();
-      alert("Please sign in to add items to your cart 🛒");
+      showToast("Please sign in to add items to your cart 🛒");
       return;
     }
 
@@ -1150,15 +1151,16 @@ document.addEventListener('DOMContentLoaded', () => {
     .then(res => res.json())
     .then(data => {
       if (data.status === 'success') {
-        alert("Product added to cart!");
+        showToast("Product added to cart! 🛒");
         fetchCart();
         showCartDrawer();
       } else {
-        alert(data.message || "Failed to add to cart.");
+        showToast(data.message || "Failed to add to cart.");
       }
     })
     .catch(err => console.error("Error adding to cart:", err));
   };
+
 
   // Listeners
   cartToggleBtn?.addEventListener('click', showCartDrawer);
