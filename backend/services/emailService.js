@@ -24,7 +24,8 @@ if (isSmtpConfigured) {
     auth: {
       user: smtpUser,
       pass: smtpPass
-    }
+    },
+    family: 4 // Force IPv4 to prevent ENETUNREACH on environments lacking IPv6 outbound routing
   });
   logger.info("📧 Nodemailer SMTP Transporter configured successfully.");
   transporter.verify((error, success) => {
