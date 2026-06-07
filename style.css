@@ -95,9 +95,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* 3. Reusable UI Utilities */
+.hide {
+  display: none !important;
+}
+
 .container {
   width: 100%;
   max-width: 1200px;
+
   margin: 0 auto;
   padding: 0 24px;
 }

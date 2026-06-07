@@ -73,7 +73,10 @@ try {
   if (process.env.DATABASE_URL) {
     pool = new Pool({
       connectionString: process.env.DATABASE_URL,
-      connectionTimeoutMillis: 3000
+      connectionTimeoutMillis: 30000,
+      max: 5,
+      idleTimeoutMillis: 10000,
+      allowExitOnIdle: true
     });
   } else {
     console.warn("⚠️ No DATABASE_URL found in environment variables. Falling back to Mock DB.");

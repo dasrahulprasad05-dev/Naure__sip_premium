@@ -60,8 +60,9 @@ const sendMail = async (to, subject, htmlContent) => {
       html: htmlContent
     });
     logger.info(`✉️ Email successfully dispatched to ${to}. Message ID: ${info.messageId}`);
+    logger.info(`📩 Nodemailer Info: ${JSON.stringify({ accepted: info.accepted, rejected: info.rejected, envelope: info.envelope, response: info.response })}`);
     await insertLog('sent');
-    return { simulated: false, success: true, messageId: info.messageId };
+    return { simulated: false, success: true, messageId: info.messageId, accepted: info.accepted, rejected: info.rejected, response: info.response };
   } catch (err) {
     logger.error(`❌ Failed to send email to ${to}: ${err.message}`);
     await insertLog('failed', err.message);
