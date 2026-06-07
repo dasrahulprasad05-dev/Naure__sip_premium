@@ -27,6 +27,13 @@ if (isSmtpConfigured) {
     }
   });
   logger.info("📧 Nodemailer SMTP Transporter configured successfully.");
+  transporter.verify((error, success) => {
+    if (error) {
+      console.error('❌ SMTP connection failed:', error.message);
+    } else {
+      console.log('📡 SMTP Server is ready to take our messages');
+    }
+  });
 } else {
   logger.warn("⚠️ SMTP environment variables are unconfigured. E-mails will output to system logs.");
 }

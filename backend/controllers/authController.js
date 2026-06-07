@@ -52,10 +52,12 @@ export const registerUser = async (req, res, next) => {
     // Generate JWT access token
     const token = generateToken(newUser.id, newUser.email);
 
-    // Send Welcome Email asynchronously
-    sendWelcomeEmail(newUser.email, newUser.name).catch(err => {
-      console.error('⚠️ [Welcome Email] Dispatch failed:', err.message);
-    });
+    try {
+      const emailResult = await sendWelcomeEmail(newUser.email, newUser.name);
+      console.log('📧 Welcome email result:', JSON.stringify(emailResult));
+    } catch (err) {
+      console.error('❌ Welcome email error:', err.message);
+    }
 
     res.status(201).json({
       status: 'success',
