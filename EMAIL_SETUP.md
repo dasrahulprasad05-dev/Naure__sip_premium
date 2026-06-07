@@ -12,7 +12,7 @@ Add the following keys to your local environment file (`backend/.env`) or your R
 
 ```env
 SMTP_HOST=smtp.gmail.com
-SMTP_PORT=587
+SMTP_PORT=465
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-gmail-app-password
 SMTP_FROM=your-email@gmail.com
@@ -43,7 +43,7 @@ To wire up outbound transactional emails on your live Render backend:
 3. Select the **Environment** tab on the left navigation column.
 4. Click **Add Environment Variable** and enter the SMTP credentials:
    - `SMTP_HOST` = `smtp.gmail.com`
-   - `SMTP_PORT` = `587`
+   - `SMTP_PORT` = `465`
    - `SMTP_USER` = `your-verified-email@gmail.com`
    - `SMTP_PASS` = `16-character-gmail-app-password`
    - `SMTP_FROM` = `your-verified-email@gmail.com`

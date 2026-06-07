@@ -181,8 +181,18 @@ const generateUUID = () => {
 
 // Core query coordinator function
 export const query = async (text, params = []) => {
+  const start = Date.now();
   if (!isMock && pool) {
-    return await pool.query(text, params);
+    try {
+      const res = await pool.query(text, params);
+      const duration = Date.now() - start;
+      console.log(`[DB Query] Duration: ${duration}ms | SQL: ${text.substring(0, 80)}...`);
+      return res;
+    } catch (err) {
+      const duration = Date.now() - start;
+      console.error(`[DB Query Error] Failed after ${duration}ms: ${err.message}`);
+      throw err;
+    }
   }
 
   // Virtual DB Query Parser for in-memory simulator
