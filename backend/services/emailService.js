@@ -7,13 +7,7 @@ dotenv.config();
 
 // Create nodemailer transporter
 const smtpHost = process.env.SMTP_HOST;
-let smtpPort = process.env.SMTP_PORT || 465;
-
-// Automatically upgrade Gmail SMTP port 587 to 465 for 6x faster dispatch times
-if (smtpHost === 'smtp.gmail.com' && (smtpPort === 587 || smtpPort === '587')) {
-  smtpPort = 465;
-}
-
+const smtpPort = process.env.SMTP_PORT || 587;
 const smtpUser = process.env.SMTP_USER;
 const smtpPass = process.env.SMTP_PASS;
 const fromEmail = process.env.SMTP_FROM || 'no-reply@naturesip.com';

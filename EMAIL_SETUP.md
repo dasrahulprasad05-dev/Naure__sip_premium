@@ -43,7 +43,7 @@ To wire up outbound transactional emails on your live Render backend:
 3. Select the **Environment** tab on the left navigation column.
 4. Click **Add Environment Variable** and enter the SMTP credentials:
    - `SMTP_HOST` = `smtp.gmail.com`
-   - `SMTP_PORT` = `465`
+   - `SMTP_PORT` = `587` (Do NOT use 465 on Render as it is blocked by their outbound firewall)
    - `SMTP_USER` = `your-verified-email@gmail.com`
    - `SMTP_PASS` = `16-character-gmail-app-password`
    - `SMTP_FROM` = `your-verified-email@gmail.com`
